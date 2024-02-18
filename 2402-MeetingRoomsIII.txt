@@ -1,0 +1,136 @@
+2/18/24
+
+We for sure have to sort the meeting times based on a increasing start time.
+
+Then, we will have a data structure which will say, 'these rooms are free,
+any you can have the lowest indexed room here you go.' This sounds like a min heap.
+
+A min heap will be used based on the requirements. We need to get the smallest room
+of a group of rooms that are unused.
+
+As soon as a room is occupied, it will be popped out of the min heap. But Nick, taking just
+anything out of a min heap takes a lot of time, what the heck? Well, when a room gets occupied,
+it will be the smallest room, which the min heap can get us, so quiet down.
+
+WAIT!!! We also have to keep track of filled rooms, because they are on a time limit,
+and can open back up to be used again! Well, we can use a data structure that has all
+the meetings that are currently going on inside of it. And we can have such a data
+structure that will give us a special meeting that has the lowest end time.... A
+MIN HEAP! This min heap would contain the end time and the room id of meetings.
+
+When we encounter a meeting time (with its given start and end time), the strategy looks
+like this. First we consult the min heap with the meetings currently going on, and grab
+the lowest meeting end time from it. If our current meeting start time does not start after
+(is greater than) the pulled end time, we walk away from this min heap. Next, we consult the
+min heap of unused rooms and pull the lowest index room out. If there are no indexed rooms, we
+wait...... But how do we wait you say? Well hold up, I have more to explain.
+
+**Quickly, let's say all the rooms are occupied, and we have a meeting. We are forced to
+look at the min heap with the occupied rooms.
+
+Ok, so back to the waiting. Once we consult the occupied rooms min heap and see that we
+will have to delay our meeting, what do we do? Well, we can pop the minimum end time meeting
+from the heap, and see that we can hijack this room the minute it frees up. To do this,
+we must redo the current meeting time to show that it will start after this minimum end time
+meeting, and still be as long as it is supposed to be. So we just make the current meeting's
+start time the minimum meeting's end time, and the current end time would be calculated from
+how long the meeting is supposed to last.
+
+Remember, in all the min heaps, we have to also keep track of the room id.
+
+Let's write some small code for the occupied room min heap:
+
+// Our pair is the (end time, room id)
+
+auto compare = [](const pair<long long, int>& a, const pair<long long, int>& b){
+  if(a.first == b.first) {       // if the end times are equal...
+    return a.second > b.second;     // return the smallest room. (min heaps work opposite, the greater than symbol doesn't mean greater than.)
+  } else {
+    return a.first > b.first;
+  }
+};
+priority_queue<pair<long long, int>, vector<pair<long long, int>>, decltype(compare)> pq;  // decltype shows how to sort this heap since there are two values in a pair.
+
+
+Now that I've shown you how to make the min heap for the occupied rooms, let's go on to code up
+the full problem.. with this min heap I showed you for occupied rooms, the min heap we talked about
+that stored unused rooms and gives the smallest, and that we need to sort the meetings array
+in the first place. Leggo.
+
+
+sort(meetings.begin(), meetings.end());     // sorting the meetings in increasing order...
+for(auto& v : meetings) {             // iterating through the meetings one by one...
+  long long start = v[0], end = v[1];
+  // in this while loop, we are converting occupied rooms to free rooms if possible.
+  // basically, if any existing occupied meeting room can be freed up before starting this current meeting.
+  while(!pq.empty() && pq.top().first <= start) { // first arg: while there are at least 1 rooms occupied in the occ min heap, I'm going to check if I can wait for that room. Second arg: we are pulling the top element from this min heap and seeing if its end time is smaller than our start time. These both must be true to make the meeting inside the occupied min heap into a freeroom.
+    freeRooms.push(pq.top().second);      // .second is the room id. 
+    pq.pop();       // we take it out.
+  }
+
+  if(!freeRooms.empty()) {    // if there are free rooms available...
+    booked[freeRooms.top()]+++    // remember, freerooms is just a min heap with the room ids only. we increase frequency of booked room id.
+    pq.push({end, freeRooms.top()});      // this is an occupied room now, so we push its end time and room id to the occupied min heap.
+    freeRooms.pop()         // we get rid of this used room from the unused room min heap.
+  } else {      // if there are no free rooms... and we are delayed....
+    booked[pq.top().second]++;      // we know the we will take the best room from the occupied min heap.
+    auto p = pq.top();            // we have to alter the time of the delayed meeting. Now, save the last room.
+    pq.pop();                     // get it out.
+    pq.push(p.first + (end - start), p.second);    // Push the first arg(end time) as the last end time plus however long the meeting is. Then push the room id as usual.
+  }
+}
+
+
+We also need to initialize the booked map. Why do we use a map and not an unordered map?
+
+We use it so it sorts the room ids from least to greatest so that it gives us the least indexed room for sure,
+even if there are mulitple frequencies of used rooms.
+
+
+class Solution {
+public:
+    int mostBooked(int n, vector<vector<int>>& meetings) {
+        map<int,int> booked;    // booked map
+
+        auto compare = [](const pair<long long, int>& a, const pair<long long, int>& b){
+          if(a.first == b.first) {       // if the end times are equal...
+            return a.second > b.second;     // return the smallest room. (min heaps work opposite, the greater than symbol doesn't mean greater than.)
+          } else {
+            return a.first > b.first;
+          }
+        };
+        priority_queue<pair<long long, int>, vector<pair<long long, int>>, decltype(compare)> pq;
+        priority_queue<int, vector<int>, greater<int>> freeRooms;   // freerooms min heap.
+        for(int i=0; i<n; i++) freeRooms.push(i);     // in the beginning, every room is a free room.
+
+        sort(meetings.begin(), meetings.end());   // sort meetings
+        for(auto& v : meetings) {
+          long long start = v[0], end = v[1];
+          (while !pq.empty() && pq.top().first <= start) {
+            freeRooms.push(pq.top().second);
+            pq.pop();
+          }
+
+          if(!freeRooms.empty) {
+            booked[freeRooms.top()]++;
+            pq.push({end, freeRooms.top()});
+            freeRooms.pop();
+          } else {
+            booked[pq.top().second]++;
+            auto p = pq.top();
+            pq.pop();
+            pq.push(p.first + end - start, p.second);
+          }
+        }
+
+        // now, we iterate on the booked map.
+        int maxRooms = 0, meetingRoom = -1;
+        for(auto p : booked) {
+          if(p.second > maxRooms) {
+            maxRooms = p.second;
+            meetingRoom = p.first;
+          }
+        }
+        return meetingRoom;
+    }
+};

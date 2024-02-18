@@ -1,0 +1,56 @@
+2/18/24
+
+Now we are finding the minimum number of conference room needed.
+
+This means find the maximum amount of overlapping meetings at one given point in time.
+
+It is easy to draw this out and show the overlapping times. We will have a count that
+goes up 1 everytime a meeting starts, and goes down one everytime a meeting ends. 
+At the end of all the meetings, we will take the max value that the count ever was,
+and this will be our minimum number of conference rooms to use.
+
+We will make an array for the start times that is sorted, and we will do the same for
+the end times. We will have pointers on both arrays to iterate through them. First,
+we compare the start and end times in the first index. If the start time is smaller,
+we increment count by 1 (number of meetings currently going on). Everytime we iterate
+through the start array, the count goes up. Once we get to a point where the start is
+greater than the end, that means a meeting ended, so decrease the count by 1. We go
+through both arrays. (Once we finish going through start array, we are pretty much done).
+
+
+
+
+class Solution {
+public:
+    /**
+     * @param intervals: an array of meeting time intervals
+     * @return: the minimum number of conference rooms required
+     */
+    int minMeetingRooms(vector<Interval> &intervals) {
+        vector<int>(intervals.size()) start;
+        vector<int>(intervals.size()) end;
+
+        sort(intervals.begin(), intervals.end());
+
+        for(auto p : intervals) {
+            start.push_back(p.first);
+            end.push_back(p.second);
+        }
+
+        int result = 0, count = 0;
+        int s = 0, e = 0;
+        while(l < intervals.size()) {
+            if(start[s] < end[s]) {
+                s++;
+                count++;
+            } else {
+                e++;
+                count--;
+            }
+            result = max(result, count);
+        }
+        return result;
+
+
+    }
+};

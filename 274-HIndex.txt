@@ -1,0 +1,23 @@
+2/18/24
+
+I don't even know what H-index is.
+
+The cheap solution to h-index is sorting the array, reversing the order, then iterating through the array.
+We check to see if the index is greater than the value at that index. If it is, we return the index.
+
+If we go through the whole loop without any value being less than its index, then the H-index is the entire array.
+
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        sort(citations.begin(), citations.end());
+        reverse(citations.begin(), citations.end());
+
+        for(int i = 0; i < citations.size(); i++) {
+            if(i >= citations[i]) {
+                return i;
+            }
+        }
+        return citations.size();
+    }
+};
