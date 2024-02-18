@@ -1,0 +1,19 @@
+2/13/2024
+
+Sometimes, with problems, there is just something that you have to know when you solve it. That's what it is like for this problem.
+
+You just gotta know.
+
+First, we reverse the entire array. Next, we reverse the first k elements. Then, we reverse the rest of the elements.
+
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        // The trick here is reversing the whole array, then reverse the first
+        // numbers, then reverse the rest of the numbers.
+        k = k % nums.size();
+        reverse(nums.begin(),nums.end());
+        reverse(nums.begin(), nums.begin() + k); // first arg start at immediate index, sec arg never gets to the index put in.
+        reverse(nums.begin() + k, nums.begin() + nums.size());
+    }
+};

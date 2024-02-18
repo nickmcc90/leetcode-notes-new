@@ -1,0 +1,24 @@
+2/16/24
+
+This will show us the greedy solution.
+
+If the goalpost is the end of the array (where we have to land), we can start
+from the end, and try to shift the goalpost closer and closer to the start.
+This has us iterating O(n) times because we go through each index going from
+the end to the front of the array.
+
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+      int n = nums.size();
+      int goalpost = n - 1;
+
+      for(int i = n - 1; i >= 0; i--) {
+        if(i + nums[i] >= goalpost) {
+          goalpost = i;
+        }
+      }
+
+      return (goalpost == 0) ? true : false;
+    }
+};

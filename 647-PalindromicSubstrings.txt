@@ -1,0 +1,116 @@
+2/10/2024
+
+Method #1: Brute force
+Try all the substring combinations which is O(n^2), then check if the substring is a palindrome or not O(n). This
+totals out to O(n^3).
+
+The O(n^2) would be testing for all index i's in the string, and for each i, retrieve the j and go through all the j's.
+For each iteration of j, we go to another function and check if this substring is a palindrome O(n).
+
+Basically, this method is choosing a pointer i and j, and if they match, then we check inside.
+
+
+**This solution shouldn't work in leetcode, because it's too long. We need to optimize it.
+class Solution {
+public:
+  int isPalindrome(string& s, int i, int j) {
+    if(i >= j) return 1;
+    return s[i] == s[j] ? isPalindrome(s, i+1, j-1) : 0;
+  }
+
+  int countSubstrings(string s) {         // For all the i's and j's, finding palindromes and increasing the count.
+    int count = 0;
+    for(int i = 0; i < s.size(); i++) {
+      for(j = i; j < s.size(); j++) {
+        count += isPalindrome(s, i, j);
+      }
+    }
+    return count;
+  }
+}
+
+Method #2: Top down DP
+The way to optimize the previous method is to store values that are palindromes so that we are not stuck recalculating
+the same palindrome if our i and j positions are just on the outside of the palindrome. When we stores these values in the dp,
+we'll never have to recalculate them. So we take the same code, and add dp stuff.
+
+class Solution {
+public:
+  vector<vector<int>> dp;     // initializing it first.
+  int isPalindrome(string s, int i, int j) {
+    if(i >= j) return 1;
+    if(dp[i][j] != 1) return dp[i][j];          // now I know what this line is, it prevents us from computing something that we have before, because we store values in the next line, so it won't be negative 1 anymore.
+    return dp[i][j] = s[i] == s[j] ? isPalindrome(s, i+1, j-1) : 0;
+  }
+
+  int countSubstrings(string s) {
+    dp = vector<vector<int>> (s.size(), vector<int>(s.size(), -1));       // initializing it inside the function.
+    int count = 0;
+    for(int i = 0; i < s.size(); i++) {
+      for(j = i; j < s.size(); j++) {
+        count += isPalindrome(s, i, j);
+      }
+    }
+    return count;
+  }
+}
+
+Method #3: Bottom up DP.
+Now, we iterate through the substring starting from the end. We iterate through all the i's backwards, and make sure that
+the j starts off being equal to the i and that it goes forward. 
+
+class Solution {
+public:
+  int countSubstrings(string s) {
+    dp = vector<vector<int>> (s.size(), vector<int>(s.size(), -1));
+    int count = 0;
+    for(int i = s.size()-1; i >= 0; i--) {
+      for(int j = i; j < s.size(); j++) {
+        if(i == j) {            // if i and j are the same, then it's a palindrome.
+          dp[i][j] = 1;
+        } else if(i == j + 1) {       // if i and j are adjacent, this is a special case to document so that we don't check it again.
+          dp[i][j] = s[i] == s[j] ? 1 : 0
+        } else {                                      // For anything else, it should be a one step thing, because we've already computed everything inside.
+          dp[i][j] = s[i] == s[j] ? dp[i][j] : 0
+        }
+
+        count += dp[i][j];
+      }
+    }
+    return count;
+  }
+}
+
+Method #4: Expansion. We take our i and j pairs then subtract 1 from i and add 1 to j to expand it. We only expand
+i and j if we are able to move them. Then we move the i and j pairs for every pair in the sequence. Now, we can expand
+from one index as an odd length, or an even length. We will do both for each i index.
+
+class Solution {
+public:
+  int palindromeCount(string s, int i, int j) {
+    int count = 0;
+    while(i >= 0 && j < s.size() && s[i] == s[j]) {
+      i--;
+      j++;
+      count++;
+    }
+    return count;
+  }
+
+  int countSubstrings(string s) {
+    int count = 0, n = s.size();
+    for(int i = 0; i < n; i++) {
+      int even = palindromeCount(s, i, i);
+      int odd = palindromeCount(s, i , i+1);
+      count += even + odd;
+    }
+
+    return count;
+  }
+}
+
+
+Since this is a medium problem, we won't optimize it anymore, but there are two more ways to optimize this problem.
+
+1. Suffix Arrays.
+2. Mamacher's algorithm

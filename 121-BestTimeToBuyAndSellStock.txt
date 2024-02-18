@@ -1,0 +1,20 @@
+2/14/24
+
+We can have two variables that we update as we iterate through the array. A maximum profit variable and
+a minimum price variable. With each number in the array, we check if the current value minus the previous value
+is the larger number, or if the previous maximum profit is bigger with a max function. We also check if the smallest
+value is the value we saved previously or if its the current value we are on.
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int min_price = prices[0];
+        int maxprof = 0;
+
+        for(int i=1; i < prices.size(); i++) {
+            maxprof = max(maxprof, prices[i]-min_price);
+            min_price = min(min_price, prices[i]);
+        }
+        return maxprof;
+    }
+};

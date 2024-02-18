@@ -1,0 +1,32 @@
+2/11/2024  **not daily problem
+
+Given an array of digits, return the digit that appears the most in the array.
+
+Now, we have to iterate O(n) through the array and store each value and its frequency in a hash map,
+then go through the map and check if the x.second value is greater than n/2, then display the x.first
+value.
+
+Or, we can sort the list from least to greatest O(n log n) then find the number at index n/2, because that
+will be the most appearing number.
+
+This is a level easy problem, I'll show the hash map solution.
+
+class Solution {
+public:
+  int majorityElement(vector<int>& nums) {
+    int n = nums.size();
+    unorderedmap<int,int> dp;
+    for(int = 0; i < n; i++) {
+      dp[nums[i]]++;
+    }
+
+    n = n / 2;
+
+    for(auto x : dp) {
+      if(x.second > n) {
+        return x.first;
+      }
+    }
+    return 0;
+  }
+}

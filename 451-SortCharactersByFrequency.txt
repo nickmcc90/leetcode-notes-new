@@ -1,0 +1,94 @@
+2/7/2024
+
+Let's go through the journey of multiple answers to this question.
+
+The first method is to easily sort the given string once we have the frequencies of all the characters, such like:
+sort(s.begin(), s.end(), x)         This x function is the requirements of which to sort the string. We shall see this method below.
+
+
+class Solution {
+public:
+  string frequencySort(string s) {
+    vector<int> freq(128,0); // This is initializing a vector of 128 0's to capture all lowercase and uppercase ascii values.
+    for(auto ch : s) freq[ch]++;   // indexing each letter's frequency.
+
+
+    auto cmp = [&](char a, char b){                 Firstly, the ampersand in the brackets allows us to access the variables of the above code.
+      if(freq[a] == freq[b]) return a < b;          We return the higher freqency value. If the freqs are equal, it doesn't matter what
+      return freq[a] > freq[b];                     we return.
+
+    }
+
+    sort(s.begin(), s.end(), cmp); // The cmp lambda function determines how we sort these characters.
+
+    return s;
+  }
+}
+
+
+Can we improve this? Yes.
+Instead of sorting the entire string to order the frequencies, we can only take the distinct values in our initialized vector and
+sort those instead. There can only be 26 upper, 26 lower, and 10 digits. Instead of sorting let's say 5 characters in the given string
+of a a b b b, we can sort the two values of a->2 and a->3 in our init. vector.
+
+This reduces the complexity from n*log(n) to k*log(k)   (k being the distinct values in the frequency hash map)
+
+class Solution {
+public:
+  string frequencySort(string s) {
+    unordered_map<char, int> freq;    // Here we are getting our frequencies.
+    for (auto ch : s) freq[ch]++;
+
+  vector<pair<char, int>> freqArr;
+  for(auto [ch, fq] : freq) freqArr.push_back({ch, fq});    // We do this because it would take too long to do just a normal map?
+  }
+
+  auto cmp = [&](pair<char, int>& a, pair<char, int>& b){
+    return a.second > b.second;
+  };                                                            // Don't forget the semicolon here since this is a lambda function.
+
+  sort(freqArr.begin(), freqArr.end(), cmp);  // We are sorting the distinct values instead of the given string. We are sorting these based on its frequency, the second of the pair.
+
+  //Now that freqArr is sorted...
+
+  string ans = '';                  // Initializing the string answer.
+  for(auto [ch, fq] : freqArr) ans.append(fq, ch);      // In the append, the first arg is the number of times to append the second arg.
+  return ans;
+}
+
+
+Can we optimize this even more????? Yes.
+**note --> I think sorting in general gives a log(?) time.**
+In order to make this more efficient, we must not use sorting for the distinct values.
+But the question says to sort???? This is a dilemma.
+To solve this, we need to use a sorting method that doesn't use the sorting time complexity (haha). It's called the bucket sort.
+With THIS, we have an array that uses the indexes AS the frequencies of the letters. This groups all the letters that
+have a similar freq. We iterate from the back of this array since the higher index means a higher frequency. We append
+the character 'index number of times' in the append function.
+
+
+class Solution {
+public: 
+  string frequencySort(string s) {
+    unordered_map<char, int> freq;
+    for(auto ch : s) freq[ch]++;      // Tracking the freqs.
+
+    vector<vector<char>> BucketData(s.length()+1);      // We always have to record the size of the initialized thing. Filling it with something is optional. I think we make it size + 1 to account for index 0.
+    for(auto [ch, fq] : freq) BucketData[fq].push_back(freq[ch])    // initializing bucketdata and pushing characters into this place based on freq.
+
+    string ans = '';
+    for(int fq=s.length(); fq>=1; fq--){        // Here, we iterate through bucket data starting at the last index through to the first one
+      for(auto ch : BucketData[fq]) {         // Here, we iterate through each character inside of the current index of the bucketdata box.
+        ans.append(fq, ch);                   // We append each character we find based on the index of the bucketdata, that many times.
+      }
+    }
+
+    return ans;
+
+  }
+}
+
+
+
+
+

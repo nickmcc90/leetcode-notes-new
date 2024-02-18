@@ -1,0 +1,98 @@
+2/9/2024
+
+When you think about it, this may take O(n^2) to complete. This is not true though, because
+since the modulus needs to be 0, smaller % larger will never be equal to zero, so we don't have
+to try that. We are only looking at larger % smaller.
+
+[a,b,c] so b%a c%a c%b.
+
+First, we would sort the array in increasing order, then start comparing pairs.
+An extra optimization would be to do b%a, then c%b, in consecutive pairs. If these
+are both zero, then there is no need to check c%a due to the transitive property.
+
+LIS or Longest Increasing Subsequence.
+(Watch video at 15min)
+
+So, with [1,2,3,4,6] array
+         [1,2,2,3,3] lis
+
+We are checking the (element after the current element) % (element).
+The 1 in the beginning of lis will always be there.
+Since 2%1 is 0, we check 1's lis value and add 1.
+Since 3%2 is not 0, we dont add anything, then we check
+3%1, and it is 0, so we add 1 to that 1 lis value for 3.
+4%3, 4%2, 4%1. Two of these equal 0, but 4%2 outputs a larger
+lis value because adding 1 to 2's lis value gives 3. We go through
+the entire array like this until we are through.
+
+While building this lis array, we can track the answers as well that
+make the largest subset. 
+
+Again, when checking each possibility, you only update the lis value
+when the new value is larger.
+
+This approach would take O(n^2) time because we go through every element, then check
+each one with each other, and it will take O(n^2) space because the largest
+array we can store would be n^2 size.
+
+To optimize the space, instead of making a whole array:
+At our current index, we put the index that is responsible for making the current index big.
+
+So, for the above example, this would look like:
+preIndex array -> [-1, 0, 0, 1, 2]
+
+The 4th element is saying that the 1st index got him big, then the first element
+is saying that the 0th index got him big.
+
+So the lis array will start with being all 1's, 
+and the preIndex array will start with being all -1s.
+
+So how do we get the answer?
+
+Once we are done making the lis and preIndex arrays, 
+we look to the lis array for the largest value (length).
+With this length, we take the current element, and then look 
+at the preIndex value for the next element. We take that element,
+then look to its preIndex value for the next element. We keep doing
+this until the preIndex value we find is a -1.
+
+This will make the space only O(n).
+
+**There are many optimizations that can only be done in bottom up code,
+even if you always opt to do top down code.
+
+**You have to understand the bottom up code.
+
+class Solution {
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        // initialization
+        int n = nums.size();
+        vector<int> lisLength(n,1), preIndex(n, -1); // getting the arrays for lis and preIndx
+        int maxLen=0, index=-1; // after we are done with the answer, these will help track down our answers.
+
+        sort(nums.begin(), nums.end()); // sorting the array to make sure our comparisons are larger % smaller.
+        for(int i = 0; i<n; i++){ // for all the possible i's in the given array...
+            for(int j=0; j<i; j++){     // we try for every back comparsion as long as it is before i....
+                if(nums[i] % nums[j] == 0 && 1 + lisLength[j] > lisLength[i]) { // we are checking them modulus and if the lisLength of the previous index is larger (lisLength[j]), which would mean we need to update lisLength[i].
+                    lisLength[i] = 1 + lisLength[j]; //updating lisLength;
+                    preIndex[i] = j; // saving the index of which made the current index larger.
+
+                }
+            }
+
+            if(lisLength[i] > maxLen){      // For each max j we find for a specific i, we update the maxLen and index values, in order to get the answer by the end.
+                maxLen = lisLength[i];
+                index = i;
+            }
+        }
+        // Once this portion is done, we are good to find the subset answers.
+        vector<int> ans;
+        while(index != -1){
+            ans.push_back(nums[index]);
+            index = preIndex[index];
+        }
+
+        return ans;
+    }
+};

@@ -1,0 +1,1 @@
+Recursion is a process were a function invokes itself. The function would be called a recursive function.

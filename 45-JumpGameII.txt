@@ -1,0 +1,42 @@
+2/17/24
+
+The second installment of the jump game. Hooray!
+
+We are taking another greedy approach, just like the first jump game installment.
+However, we are also gonna use the BFS (breadth-first search) algorithm.
+
+Let's explain. Look at this array:
+[2, 3, 1, 1, 4]
+
+We are at the 0th index. This index will be highlighted by a yellow bracket underneath. Now,
+our value is 2. We can either go to the 3 value, or the 1 value. Since these are the options
+we can choose outside of our current index, they will be highlighted by a green bracket
+underneath. Now from the perspective of the green bracket, we can move from the 3 value to
+both the 1 value, the 1 value, and the 4 value. The 1 value within the green bracket can also
+go to a 1 value. So now, from the green bracket area, the values that we can reach that are
+outside of this green area are highlighted in purple.
+
+We are color coating the value groups because the total number of colors that we use will
+determine the total number of jumps to get to the last index. The color groups highlight the
+max possible distances and all possiblities.
+
+Let's code this up!!!!
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+      int result = 0            // this is the number of min jumps it will take.
+      int l = 0, r = 0;         // these are our left and right pointers to illustrate the colored brackets as we move through the array.
+
+      while(r < nums.size() - 1) {      // we run this code until the right pointer is at the last index.
+        int farthest = 0;             // we have to see who in our current bracket can jump the farthest.
+        for(int i = l; l <= r; i++) {         // we iterate from the left pointer to the right pointer.
+          farthest = max(farthest, i + nums[i])         // we update farthest with the max location we can jump to. With the left and right pointers, we discover the farthest distance we can jump.
+        }
+        l = r + 1;      // left pointer is always equal to the right pointer + 1 as we move on.
+        r = farthest;     // right pointer will naturally be however far we could go from the last bracket.
+        result += 1;    // each time we move the pointers, a bracket was made, so that means a min jump was found.
+      }
+      return result;
+    }
+};

@@ -1,0 +1,118 @@
+2/11/2024
+
+Hard level problem.
+
+It is for sure that we cannot go the greedy method for this problem because
+we have to analyze all the paths.
+
+Let's analyze what the method would be for one robot only.
+
+Since it would have to go down a row for each move, it would have 3 options each time
+for a column to land on. We can use recursion to find all the best paths.
+
+result += grid[0][0] + max(dfs(i+1,x)) Where x is j-1, j, and j+1.
+
+Now, we will have repeating sub problems in the robot's movement because the robot
+can take different paths but still end up in some of the same positions as itself 
+when it took a different path. We will have to track the robots movements to make sure
+we aren't calculating the same path for multiple situations. This means we just have to 
+add a dp.
+
+Now, onto the main problem, two robots. We know for sure that we need to use recursion, and that
+we will need a dp to track the movements as to not recalculate the same situations.
+
+Since both robots are moving, there will be more possibilites for moves. If robot 1 has 2 possible moves,
+and robot 2 and 3 possible moves, then we multiply those together to get 6 possible situations.
+
+In the previous recursion tree with only 1 robot, our recursion tree had 3 childs. Now with two robots,
+we will have at max 9 childs with each robo having the possiblity of 3 moves max. 
+
+So with this recursion plan involving two robots, we will have four inputs to reinstate into the recursion function.
+solve(R1i, R1j, R2i, R2j)           With the j's being the different moves.
+
+The time complexity will be O(m^2 into n^2). Can we optimize? Yeah.
+
+Since each robot has to move down a row each time, we can minimize the four inputs into three inputs, since both
+robos will take the same i, which means they will always be on the same row. This reduces our time to O(m*n^2) with:
+
+solve(i, R1j, R2j)
+
+Now, we need to develop our base cases for the recursion process. Remember, our answer is for the maximum number of
+cherries that we can get. So, if we go out of bounds, then we will get 0 cherries:
+
+if(i == m) return 0; ** out of bounds past rows.
+if(R1j < 0 or R2j < 0 or R1j >= n or R2j >= n) ** out of bounds columns.
+
+So... result += grid[i][R1j]     and     result += grid[i][R2j] // For the starting positions.
+
+BUT.... only if(R1j != R2j), because if they are on the same square, they both can't get the cherry.
+This is for the starting cherry box.
+
+So... we first make the base cases, then we initialize the result variable and add up the cherries in their current spot AS LONG AS they
+are not in the same spot, then we do the recursion process for the 9 possible movements. Then, we take that result, add it up, then post that
+as the solution.
+
+class Solution {
+public:
+
+  int solve(vector<vector<int>>& grid, int i, int robot1j, int robot2j) {
+    if(robot1j < 0 || robot2j < 0 || robot1j >= grid[0].size() || robot2j >= grid[0].size()) return 0;      // here are some base cases.
+    if(i == grid.size()) return 0;
+
+    int result = 0;
+    result += grid[i][robot1j];     // This adds the first box that robot 1 resides in or starts in. We also add robot 1's position first, then go to the if statement to load in robot 2's position.
+    if(robot1j != robot2j) result += grid[i][robot2j];
+
+    int maxForNextRow = 0;      // Now, we need to form 9 possible combinations.
+    for(int x = robot1j - 1; x <= robot1j + 1; x++) {
+      for(int y = robot2j - 1; y <= robot2 + 1; y++) {
+        maxForNextRow = max(maxForNextRow, solve(grid, i+1, x, y));
+      }
+    }
+    result += maxForNextRow;
+
+    return result;
+
+  }
+
+  int cherryPickup(vector<vector<int>>& grid) {
+    int n = grid[0].size();
+    return solve(grid, 0, 0, n-1);  // The values here are grid, i, R1j, and R2j.
+  }
+}
+
+So this above is a simple recursion, we can actually optimize it by adding a few lines of code to the existing stuff.
+We need to not redo the situations that we've already come across in the robot movement, so we
+track the robot movements with a dp.
+
+class Solution {
+public:
+
+  vector<vector<vector<int>>> dp; // ***** always initialize
+  int solve(vector<vector<int>>& grid, int i, int robot1j, int robot2j) {
+    if(robot1j < 0 || robot2j < 0 || robot1j >= grid[0].size() || robot2j >= grid[0].size()) return 0;
+    if(i == grid.size()) return 0;
+    if(dp[i][robot1j][robot2j] != 1) return dp[i][robot1j][robot2j]; // ***** recursion base case if we've come across a variation before.
+
+    int result = 0;
+    result += grid[i][robot1j];    
+    if(robot1j != robot2j) result += grid[i][robot2j];
+
+    int maxForNextRow = 0;     
+    for(int x = robot1j - 1; x <= robot1j + 1; x++) {
+      for(int y = robot2j - 1; y <= robot2 + 1; y++) {
+        maxForNextRow = max(maxForNextRow, solve(grid, i+1, x, y));
+      }
+    }
+    result += maxForNextRow;
+
+    return dp[i][robot1j][robot2j] = result; // ***** returning value in dp is standard for dp.
+
+  }
+
+  int cherryPickup(vector<vector<int>>& grid) {
+    int n = grid[0].size(), m = grid.size(); // ***** initializing m as well.
+    dp = vector<vector<vector<int>>>(m, vector<vector<int>>(n, vector<int>(n, -1))); // ***** setting up the 3D dp vector with negative 1s.
+    return solve(grid, 0, 0, n-1); 
+  }
+}

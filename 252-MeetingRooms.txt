@@ -1,0 +1,28 @@
+2/18/24
+
+This question requires a premium membership, so I haven't done the problem on leetcode, but
+I was interested. Sike, I did the code on lintcode, lol.
+
+So this is easy, we first have to sort the meeting times into increasing start time order,
+so nlogn. Then, we compare the meetings based on if the end time of a previous meeting is greater
+than a start time of a next meeting; this would return false. Someone can't attend all those meetings.
+If the start time of a meeting is greater than a end time of a previous meeting, we are in
+the clear. That's pretty much it.
+
+class Solution {
+public:
+    /**
+     * @param intervals: an array of meeting time intervals
+     * @return: if a person could attend all meetings
+     */
+    bool canAttendMeetings(vector<Interval> &intervals) {
+        int last = 0;
+        for(auto p : intervals) {
+            if(p.first < last && last != 0) {
+                return false;
+            }
+            last = p.second;
+        }
+        return true;
+    }
+};

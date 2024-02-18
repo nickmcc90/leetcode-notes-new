@@ -1,0 +1,66 @@
+2/6/2024
+
+Anagrams are words that have the same amount of characters, and the exact same letters that make new words, like:
+
+'bat' and 'tab'.
+
+Since we need to find all of the words that are anagrams, it would be helpful if we could take each string given to us,
+and have it output another string that will result in the same string as other anagrams. We can do this by
+taking each string and outputting the result in alphabetical order.
+
+'tab' 'bat' will both output:
+'abt' 'abt'. Now we can code it up.
+
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> mp;    //Initializing a dictionary of the alphabetical string keys, and their value which is a list of inputs given.
+        for(auto s : strs) { // saving the orig string before sorting into defining key.
+            string Originalstring = s;
+            sort(s.begin(), s.end());
+            mp[s].push_back(Originalstring);
+        }
+
+        vector<vector <string>> anagrams;  // Initializing vector of vectors to put the answers in.
+        for(auto [key, VectorOfStrings] : mp){
+            anagrams.push_back(VectorOfStrings);
+        }
+
+        return anagrams;
+    }
+};
+
+
+Another way is to...
+
+// Or we can have the key of the different original strings be a frequency vector of size 26 that indexes
+// each letter's frequency by subtracting the letter from 'a'. Then, we turn this vector<int> into a string
+// with hash-mark delimiters. This is because we can't have an iterable as the key in a map. Let's code this up
+// for practice.
+
+class Solution {
+public:
+    vector<vector<string>> anagramSolution(vector<string>& strs) {
+        map<string, vector<string>> mp;  // initialize the map outside of the loop
+        for( auto s : strs) {
+            string hashString = "";   // initialize the string and freq vector inside the loop
+            vector<int> freq(26,0);
+            for(ch : s) freq[ch - 'a']++;  // turning each letter in s into frequency
+            for(int i=0; i<26; i++) {       // taking each thing in the freq vector and converting it to string in hashString.
+                hashString.push_back(freq[i]);
+                hashString.push_back('#');
+            }
+
+            mp[hashString].push_back(s);    // We have hashString as the key, and we are pushing back the original s into the map.
+
+        vector<vector<string>> anagrams;
+        for(auto [key, ValueStrings] : mp) {
+            anagrams.push_back(ValueStrings)
+        }
+
+        return anagrams;
+
+        }
+    }
+}

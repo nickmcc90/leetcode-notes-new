@@ -1,0 +1,19 @@
+2/13/2024
+
+So we know that we have to iterate over the whole string to get each element to check if it's a palindrome.
+
+So, this is as simple as checking if the reverse of the string is equal to the original string.
+
+class Solution {
+public:
+    string firstPalindrome(vector<string>& words) {
+        for(auto s : words) {
+            string i = s;   // storing the string.
+            reverse(i.begin(),i.end()); // the reverse will be equal to the normal.
+            if(s==i) {
+                return i;
+            }
+        }
+        return "";
+    }
+};

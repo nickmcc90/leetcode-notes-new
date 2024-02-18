@@ -1,0 +1,106 @@
+2/17/24
+
+We will discuss why this problem is NOT a dp problem.
+
+Problem path: Brute force DP O(n^3), Brute force Greedy O(n^2logn), 
+Better Greedy O(nklogn), Better Binary Search O(nlog^2n) [this Binary
+search can be optimized further], and finally Optimal Min Heap
+O(nlogn);
+
+Your first approach in an interview depends on how optimally you start thinking, but a
+good strategy is to start with the brute force approach and then carry on from there with
+optimizations.
+
+Method #1: DP?
+
+So at first, when you see that for a specific i index you have two options [bricks or ladders],
+it could be a dp problem because we can try for all the possible solutions and have some recursion
+problem, and track our solutions. Let's write out the DP solution real quick, or a lil rough
+draft.
+
+int op1, op2, op3;
+if(h[i] >= h[i+1]) {
+  op1 = 1 + solve(i+1, bricks, ladders);     // So in the case we go down, we maintain our bricks and ladders count. This is one situation.
+} else {
+  int heightDiff = h[i+1] - h[i];
+
+  if(bricks - heightDiff >= 0) {
+    op2 = 1 + solve(i+1, bricks - heightDiff, ladders);       // using bricks during higher building travels
+  }
+
+  if(ladders > 0) {
+    op3 = 1 + solve(i+1, bricks, ladders - 1);              // using ladders during higher building travels.
+  }
+}
+
+return dp[i][bricks][ladders] = max({a,b,c}) // the max possibility for each route.
+
+This dp will be very high complexity, even though we have the dp tracking unique solutions. O(10^5 + 10^9 + 10^6);
+
+There is a similiar problem out there in leetcode => 871-MinimumNumberOfRefuelingStops. This uses DP at first,
+but its too long so we optimize with greedy, min heap, max heap.
+
+Method #2: Greedy
+Let's think greedily. For MEGA jumps, it would be optimal to use a ladder, and only use bricks within our means.
+
+For this, we will take a look at a random ith building, and see if we can reach it.
+So, we can go through the given array and look at all the instances where we have to go to a higher building up to 
+this ith index. We record these jump distances in a vector. Then we sort this vector from least to greatest. Then, with however many ladders we have,
+we use those on the highest jump distances in the vector. Then we use the bricks for the remaining jump distances [we do a 
+summation of these remaining jumps] and see if we can reach this building.
+
+So, we do this operation at each building, starting from index 0. We look behind it, record the jumps, sort the jumps,
+give the high jumps to the ladders, sum the remaining jumps and see if the bricks can handle it. If so, this building is
+now the farthest building. This is O(n + nlogn) bc we iterate through almost all, then sort.
+
+Now, since we are sorting just to find max values for the ladders, we know that we can optimize this situation by
+using a max heap. This would optimize the greedy approach, so a method #2.5.
+
+Method #3: Binary search
+We are going linearly across the given array with the greedy approach. Basically, once we find the answer with method 2,
+one half of the array will be green (correct, able to use bricks and ladders) and one side of the array will be
+red (not possible to move on). This is like what a binary search is like. So instead of going linearly through
+the array, we can do binary searching with this same greedy approach.
+
+O(logn + nlogn).
+
+Yooooo. We don't need to use the greedy approach at every building, even with the improved binary searching.
+We only need to use it in times of struggle... like when we have 3 jumps to perform and we only have 2 ladders.
+
+Let's walk through it. Look at this given array:
+[4,12,2,7,3,18,20,3,19]
+
+We have 2 ladders. Building (B) 0 to building (B) 1. We know that we can just use a ladder,
+and our new farthest building will be B1.
+B1 to B2, we just go down.
+B2 to B3, we know we can just use a ladder, (we have 2), and B3 can be our farthest building now.
+B3 to B4, down.
+B4 to B5. Now, we have 3 jumps to make from B0 to B5, and only 2 ladders for a cop-out answer. This
+is the time of struggle that we were talking about. So, we go into our data structure (most optimal
+would be a min heap) and pull the smallest value to use the bricks on. This will decrease our brick
+value for the next building.
+
+So, we can determine when a time of struggle is happening when the size of our min heap is greater than
+the number of ladders that we currently have. When the size gets bigger, we eliminate the newcoming
+value with our remaining bricks, and the min heap goes back to being a smaller size.
+
+Let's FINALLY write the code...
+
+
+class Solution {
+public:
+      int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
+        priority_queue<int, vector<int>, greater<int>> pq;        // this is our min heap.
+        for(int i = 0; i < heights.size() - 1; i++) {             // heights.size() - 1 because while we are at i, we compare with i + 1.
+          int jumpLen = heights[i+1] - heights[i];
+          if(jumpLen > 0) pq.push(jumpLen);               // if it is a jump, we wanna put that value in our min heap.
+          if(pq.size() > ladders) {               // if we are in emergency....
+            bricks -= pq.top();                 // take top of min heap (minimum value) and attack it with bricks.
+            pq.pop();                           // then, get rid of this value.
+          }
+          if(bricks < 0) return i;              // if bricks could not handle this... then the farthest buiding is the one we are at.
+        }
+
+        return heights.size() - 1             // if we get through the for loop, that means that way went through the whole array, so we return the last index.
+    }
+}

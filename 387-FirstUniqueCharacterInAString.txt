@@ -1,0 +1,40 @@
+2/5/2024
+
+This problem is as easy as initializing a vector thats of size 26 filled with 0's. This vector will
+represent the frequency of each letter that appears. The index of the frequency is indicative of the
+position of the letter in the alphabet, since there are 26 spots in the vector.
+
+We run a for loop that continues to run until the letters given to us have run out.
+In this for loop, we take each letter and subtract it by a to get the index of that letter
+in the alphabet. Once we find it, we +=1 the frequency of that index.
+
+
+Then, we iterate through the frequency vector until we find our first instance of a 1, because this 
+represents the first unique letter that isn't repeated in the given letters.
+
+
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        int n = s.size();
+        vector<int> frequency(26,0);
+
+        // storing the frequency of all the letters given
+        for(int i=0; s[i]!= '\0'; i++) {
+            frequency[s[i]-'a'] += 1; 
+        }
+
+        // now we traverse the frequency vector and find the first instance of a 1.
+        for(int i=0; s[i]!= '\0'; i++) {
+            if(frequency[s[i]-'a'] == 1) {
+                return i;
+            }
+        }
+
+    return -1;
+    }
+};
+
+
+// My first thought is to create a dictionary that holds a letter and its frequency, then
+// we check if any letter that comes up is within the dictionary that has 2 frequencies.

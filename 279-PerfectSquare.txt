@@ -1,0 +1,159 @@
+        // I'm thinking have a function that stores all the values of perfect squares. Then
+        // we take the n integer and divide it by these perfect squares.
+        // ^ These were my before thoughts.
+
+2/8/2024
+
+
+Given an integer n, find the LEAST amount of numbers (k) that are the square of a number that add up to that integer n.
+
+These integers (k) could be 1^2, 2^2, 3^2, 4^2, etc...
+Any number can be summed up to by 1^2.
+
+The first method would be a brute force approach where we are trying for all the possibilities. Recursion.
+
+Let's take for example, 12.
+We can break 12 down into a combination of 1^2, 2^2, and 3^2. There wouldn't be any 4^2 because that's higher than 12.
+
+We can break down 12 by doing all the possiblities and combos of these numbers and selecting one of the ways that has the
+least amount of steps.
+
+This is a digit DP method, because its recursion and because we are finding all possibilities.
+
+Basically, we are going to break n into a combo of all values (i) that are: i <= sqrt(n).
+
+--recursion---
+
+class Solution {
+public:
+    int numSquares(int n) {
+        if(n <= 0) {
+          return 0;            When n reaches 0 in the recursion, we return 0 to start the summation of steps.
+        }
+
+        int ans = n;          By default, the answer is n because 1^2 will always work.
+        for(int i = 1; i * i <= n; i++) {
+          int square = i * i;
+          ans = min(ans, 1 + numSquares(n - square));            The plus 1 is becuase we took one step already with the square. We are finding
+        }                                                        the minimum number of steps with squares to take. We put n - square into  
+                                                                 numSquares because the value we are working with now came about because we
+                                                                 took the inital number n and subtracted it from the (i) that we tried squared,
+                                                                 which gives the next total.
+
+        return ans;
+    }
+};
+
+This strategy above would take a long time, it needs to have a dp[] in it to confirm that the space it takes to store
+the answer is within n space. This would have
+a minimum number of tries root(n), and it could be as long as n.
+
+--top down DP--     
+
+class Solution {
+  public:
+    vector<int> dp;
+    solve(int n) {
+      if(n <= 0) return 0;
+
+      if (dp[n] != -1) return dp[n];
+
+      int ans = n;
+      for(int i = 1; i * i <= n; i++) {
+        square = i * i;
+        ans = min(ans, 1 + solve(n - square));
+      }
+
+      return dp[n] = ans;
+    }
+
+
+    int numSquares(int n) {
+      dp = vector<int>(n+1, -1);
+      return solve(n);
+
+    }
+}
+
+--bottom up DP--          This is the same approach as above, just reverse.
+
+class Solution {
+  public:
+    int numSquares(int n) {
+      vector<int> dp = vector<int>(n+1, 0);
+
+      for(int i = 1; i <=n; i++) {
+        dp[i] = i; // Puts all 1s square
+        for(int j = 1; j*j <= i; j++) {
+          int square = j * j;
+          dp[i] = min(dp[i], 1 + dp[i - square]);
+        }
+      }
+
+      return dp[n];
+    }
+}
+
+
+Can we optimize this code even more? Yes.
+
+Lagrange's 4 square theorem and Legendre's 3 square theorem....
+
+Bachet's Conjecture: Every natural number can be represented by the sum of 4 integer squares.
+
+b = a0^2 + a1^2 + a2^2 + a3^2.
+
+For instance, 3 = 1^2 + 1^2 + 1^2 + 0^2.
+
+For us, this 0^2 wouldn't count, so we can alter this theorem a little bit. For us, any integer can
+be represented by AT MAX 4 integers, but can be 3, 2, or 1.
+
+It can be 1 if the number is a perfect square itself. For example, 36.
+
+It can be 2 if there is i * i + j * j = n. So we will iterate over all possible i's, and to figure
+out the j, do j = sqrt(n - i^2). Then to check this j, we do j * j = n - i^2. This is because j needs to
+be a perfect square too.
+
+It can be 3 if....
+Adrain-Maric-Legendre completed 4-square theorem, with his additional statement.
+He says that any integer can be represented by the sum of 3 integers square IF...:
+n is NOT equal to 4^k * (8*n + 7)... then it is of 3 sum integers.
+If is IS equal to this equation, then it is of 4 sum integers.
+
+
+SO WITH ALL THIS KNOWN... We start our final method like this.
+First, check to see if integer n is of 4 square integers with that equation.
+Then, see if it is of 1 integer.
+Then, of 2.
+And if it is not of any of these, the answer is 3. Wow!
+
+****Caution, there is literally no way to derive this answer for this question. You would've had to know this specific answer to do this.
+    Not recommended for an interview, but you can flex your skills a little bit with this info.
+
+class Solution {
+public:
+  int numSquares(int n) {
+    int SqrtVal = (int) sqrt(n);
+
+    if(SqrtVal * SqrtVal == n) return 1;     Checking the 1 condition.
+
+    while(n % 4 == 0) {
+      n /= 4;
+    }
+
+    if(n % 8 == 7) {
+      return 4;                     Checking 4.
+    }
+
+    for(int i=1; i * i <= n; i++) {
+      int squareA = i * i;
+      int elementB = (int) sqrt(n - squareA);
+
+      if(elementB * elementB == n - squareA) {
+        return 2;
+      }
+    }
+
+    return 3;
+  }
+}

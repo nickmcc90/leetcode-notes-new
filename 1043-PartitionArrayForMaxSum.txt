@@ -1,0 +1,46 @@
+2/3/2024
+
+This is a problem that deals with digit dp.
+
+Basically, digit dp is when you realize you need to have a recursive function due to all the possiblities that could
+arise to come to a solution.
+
+In this problem, we are trying to find the maximum possible sum that can arise from a given variable subarray size (k),
+and a given full array with different integers. Within the subarray of size k, every integer within that space is
+converted into the highest integer within that space. We need to maximize the subarray sizing to our advantage to get
+the highest possible number from an array and k that is given to us.
+
+So, for digit dp, you don't have to really understand how the function is going through all of the iterations.
+We just need to code up the starting situation, then call the function back and do the n+1 situation.
+
+class Solution {
+public:
+
+    vector<int> dp;
+    int n, k;
+    int solve(int id, vector<int>& arr) {
+        if(id >= n) {
+            return 0; // If the index is higher than the size of the array, there's nothing.
+        }
+
+        if(dp[id] != -1) {
+            return dp[id]; // If one of the values is not -1, then we are finished.
+        }
+        
+        int maxValue = 0;
+        int ans = 0;
+        for(int j=id; j<min(n,id+k); j++){ // This is iterating over all of the possible values in the beginning between 0 and k.
+            maxValue = max(maxValue, arr[j]); // This is finding the max value based on the previous number.
+            ans = max(ans, (j-id+1) * maxValue + solve(j+1, arr)); // Put simply, this goes through every possible combination of array size, while adding up everything.
+        }
+
+        return dp[id] = ans;
+    }
+
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        n = arr.size();
+        this->k = k;
+        dp = vector<int>(n, -1); // This is a vector of size n filled with -1's.
+        return solve(0, arr); // This is a recursive function that will call itself and add all its values.
+    }
+};

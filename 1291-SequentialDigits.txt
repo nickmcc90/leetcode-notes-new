@@ -1,0 +1,14 @@
+2/2/2024
+
+For the string '123456789', there can only be a minimum of a two digit sequential digit and a nine digit sequential digit.
+
+This means there is a finite number of SQ's (sequential digits) to look for.
+
+We can go through each length, through each possiblity, and compare it with the low and high values.
+
+To do this, we take a substring from the string '123456789', and convert it to an integer.
+
+
+***I am getting the hint on how to solve problems like these. You need to really break the problem down
+and understand it fully without bringing any code into it. Then, once we've thought of everything, we can
+figure out how to code it.

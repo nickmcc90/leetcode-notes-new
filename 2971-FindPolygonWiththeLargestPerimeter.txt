@@ -1,0 +1,49 @@
+2/15/2024
+
+Here is the intution with this problem. We can first sort the array and have
+them lined up in non-decreasing order. Then, we can start our work by making
+sure the sum of the smaller sides is greater than the length of the largest
+side.
+
+Another thing to take away is that the more sides you have, the more length
+there should be. A polygon with four sides is more likely to have a bigger
+perimeter than one with three sides...
+
+Minimum number of sides to have is three sides.
+
+We could brute force these numbers, but the number of calculations would be
+toooooo much.
+
+
+Since we are sorting the array to a non-decreasing order, there is no need
+to iterate through all the possible combinations of sides. Why?
+
+Well, let's say we have [a1, a2, a3, a4, a5].
+Let's say a1+a2>a3. This will be our first valid polygon. We could go on to check
+if a2+a3>a4, but if it is, we could easily just add a1 in the mix, and it will
+have a 100% chance of still being greater than a4. So instead of moving to the next 
+3 side combo, we go on to see about a four side combo, and keep going until we cannot
+go any further.
+
+This will take a prefix sums approach.
+
+class Solution {
+public:
+    long long largestPerimeter(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        long long prefixSum = nums[0] + nums[1];
+        long long ans = 0;
+
+        for(int i = 2; i < nums.size(); i++) {
+            if(prefixSum > nums[i]){
+                ans = max(ans, prefixSum + nums[i]);
+            }
+            prefixSum += nums[i];
+        }
+
+        return (ans == 0) ? -1 : ans;
+    }
+};
+
+Time: O(n+nlogn)
+Space: O(log n)

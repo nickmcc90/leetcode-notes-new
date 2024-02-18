@@ -1,0 +1,75 @@
+2/14/24
+
+Method 1: Two Pass
+
+One way is to have all the positive integers in the array in their own array, and the negative
+integers in their own array too. Then, we make a final array where we iterate through both the
+pos and neg array and push back answers as we see fit with the indexes. All odd indexes are negative
+numbers, and even indexes are positive.
+
+class Solution {
+public:
+  vector<int> rearrangeArray(vector<int>& nums) {
+    vector<int> pos, neg;
+
+    for(int el : nums) {
+      if(el > 0) pos.push_back(el);
+      else neg.push_back(el);
+    }
+
+    for(int i = 0; i < nums.size(); i++) {
+      if(i % 2 == 0) {
+        nums[i] = pos[i / 2];     // Dividing it by 2 here is necessary because we skip a value when we go onto the negative index for the final answer.
+      }
+      else {
+        nums[i] = neg[i / 2];
+      }
+    }
+    return nums;
+  }
+} 
+
+Method 2: One pass
+
+The time complexity is O(n+n). The interviewer will ask if we could do this in one pass.
+It is possible.
+It was easy to modify the given nums vector since we had a pos and neg array to repopulate
+the values. If we are to do this in one pass, we would have to make an ans array, and put the
+positive values in the odd indexes and so forth.
+
+So, we have a pointer at nums array, and two pointers on the ans array. For the answer
+array, the first pointer is for positive indexes and the second one is for negative indexes.
+Once, we populate a index, we increment the chosen pointer by 2.
+
+class Solution {
+public:
+  vector<int> rearrangeArray(vector<int>& nums) {
+    vector<int> ans(n);
+    int posVal = 0, negVal = 1;
+    for(int i = 0; i < nums.size(); i++) {
+      if(nums[i] > 0) {
+        ans[posVal] = nums[i];
+        posVal += 2;
+      } else {
+        ans[negVal] = nums[i];
+        negVal += 2;
+      }
+    }
+    return ans;
+  }
+}
+
+Method 3: One pass in place
+
+The interviewer may ask if we can solve it inplace, without making another vector. Yep.
+So, we can initialize both a pos pointer and a neg pointer. If the positive pointer is pointing
+at a positive number, then it increments by 2. If it is pointing at a negative number, it stops,
+and waits to see if the negative pointer will stop at a positive number. At this point, we swap
+the numbers where both the pointers are.
+HOWEVER, one requirement is that we make sure that the integers have their original order preserved.
+Is this guaranteed? We have to prove it. There are some cases where the order
+gets messed up due to this strategy.
+
+[-1, -2, -3, 4, 5, 6];
+
+This makes it so that it cannot be optimized anymore than in method 2! 

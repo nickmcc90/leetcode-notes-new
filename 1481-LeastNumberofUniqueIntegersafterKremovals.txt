@@ -1,0 +1,98 @@
+2/16/24
+
+We can track the frequency of each number in the array given. Then, we can
+take away numbers from there starting with the numbers that have the lowest
+frequency.
+
+Method #1: Get frequencies, sort frequencies, remove low frequencies.
+
+class Solution {
+public:
+  int findLeastNumOfUniqueInts(vector<int>& arr, int k) {
+        unordered_map<int,int> freq;
+        for (int el : arr) freq[el]++;      // making and tracking frequencies.
+
+        vector<int> freqVector;
+        for(auto p : freq) freqVector.push_back(p.second);      // pushing back frequencies into a vector.
+
+        sort(freqVector.begin(), freqVector.end());       // sorting frequencies.
+
+        int elementsRemoved = 0;
+        for(int i = 0; i < freqVector.size(); i++) {
+          elementsRemoved += freqVector[i];                       // very smart solution here. Once elementsRemoved exceeds k, we return the unique elements, which happens to be the size of the vector minus the iteration step we are on. 
+          if(elementsRemoved > k) return freqVector.size() - i;
+        }
+
+        return 0;
+    }
+}
+
+// maps sort things on the basis of keys, not values. That's why we go through the trouble
+of making an unordered_map, then extracting those values in a vector, and sorting them.
+
+// also we use 'auto' when its a pair.
+
+Time: O(nlogn)    *sorted 
+Space: O(n)  *unordered_map
+
+
+We are trying to get the minimum frequency. MINIMUM. We could use the min function. 'min heap', 'max heap'?
+
+Method #2: Min heap. This takes the same space and time as before, but I don't know how to do heaps.
+
+class Solution {
+public:
+  int findLeastNumOfUniqueInts(vector<int>& arr, int k) {
+    unordered_map<int,int> freq;
+    for(int el : arr) freq[el]++;           // same as before
+
+    priority_queue<int, vector<int>, greater<int>> freqMinHeap;
+    for(auto p : freq) freqMinHeap.push(p.second());                // pushing values into minHeap.
+
+    int elementsRemoved = 0;
+    while (!freqMinHeap.empty()){
+      elementsRemoved += freqMinHeap.top()
+      if(elementsRemoved  > k) return freqMinHeap.size();
+      freqMinHeap.pop();
+    }
+
+    return 0;
+
+
+  }
+}
+
+Can we optimize it tho???? Yeah.
+We need to take the time complexity down, from nlogn to linear. So basically we need a sorting algorithm
+that allows us to sort in linear time. (Bucket sorting, counting sort).
+So basically, we still make the frequency unordered_map and get the vector. Instead of sorting the vector,
+we have another vector that has its indexes represent a frequency value, and the values represent the number
+of times that frequency has shown up within the made frequency vector. We push everything into this vector.
+
+This solution is somewhat hard to code.
+
+class Solution {
+public:
+  int findLeastNumOfUniqueInts(vector<int>& arr, int k) {
+    unordered_map<int,int> freq;
+    for(int el : arr) freq[el]++;           // same as before.      Frequency of values.
+
+    int n = arr.size();
+    vector<int> countOfFrequencies(n + 1, 0);
+    for(auto p : freq) countOfFrequencies[p.second]++;      //   Frequency of frequencies.
+
+    int remainingUniqueElements = freq.size();
+    for(int frq = 1; frq<=n; frq++) {
+      int numElementsToRemove = min(k / frq, countOfFrequencies[frq]);
+
+      k -= (frq * numElementsToRemove);
+      remainingUniqueElements -= numElementsToRemove;
+      if(k < frq) return remainingUniqueElements;
+    }
+
+    return 0;
+
+  }
+}
+
+time and space are O(n).
