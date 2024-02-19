@@ -1,0 +1,40 @@
+2/19/24
+
+Apparently, this is a fenwick tree problem. **This isn't in the algorithms.png! Watch more of Aryan's videos.**
+
+Here is a brute force solution:
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if(n == 0) return false
+        while(n % 2 == 0) n /= 2;
+        return n == 1;              // we can do this because we need to return a boolean value.
+    }
+};
+
+Time: O(logn) Space: 1;
+
+Now to the fenwick tree. The trick is to visualize these power of twos in binary form.
+Let's do a quick recap of binary.
+10000001
+This number would be equal to 2^7 +2^0.
+
+Using this, if our n is a power of 2, we will only need one bit. If it is not, we will have to break it
+up into more than one bit, like shown above. This is our trick for the problem. There is stuff to 
+understand with it though. Look here:
+
+query(7) is query(0111) in binary because 2^0+2^1+2^2.
+
+We can get negative 7 in binary by flipping everything in query(0111) and adding 1, so:
+
+query(1001);
+
+Now do an (&) operation between them.
+
+0111 & 1001 = 0001. We have the last set bit here now.
+
+Then we subtract this number from the original binary.
+0111 - 0001 = 0110. Now the fact that this result is not equal to zero, we know that this number is not a power of two.
+
+I don't quite understand this, we can go back to this with his fenwick tree explanation at some point, maybe on the weekend.

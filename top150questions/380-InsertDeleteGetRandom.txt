@@ -1,0 +1,42 @@
+2/19/24 
+
+Sets are able to have unique elements, and remove and add them in O(1) time. However, getting a random
+element in O(1) time is not possible. So we can't use a set as our data structure anymore.
+
+How about an array? We can add things to it in O(1) time, and use the random function below:
+
+We can get a random value from doing:
+  nums[rand() % n] so that our random number is within our range.
+
+For the remove function, we will have a map that tracks all the values in the array.
+When we want to remove something, we swap the number we want to remove with the element in the back
+of the array, then remove the number we want while it's in the back, because that's an easy operation
+to do, just nums.back.
+
+class RandomizedSet {
+public:
+    vector<int> nums;
+    unordered_map<int,int> idxMap;
+    RandomizedSet() {}
+    
+    bool insert(int val) {
+        if(idxMap.find(val) != idxMap.end()) return false;     // .end() is the way search through the array.
+        nums.push_back(val);                          // pushing the value into the array
+        idxMap[val] = nums.size() - 1;              // indexing this new number in our array.
+        return true;
+    }
+    
+    bool remove(int val) {
+        if(idxMap.find(val) == idxMap.end()) return false;
+        int last = nums.back();         // this is the last ele in the array
+        idxMap[last] = idxMap[val];       // we make the last ele in the array's index equal to the number we wanna remove's index.
+        nums[idxMap[last]] = last           // we make the number in nums array the last ele 
+        nums.pop_back();
+        idxMap.erase(val);
+        return true;
+    }
+    
+    int getRandom() {
+        return nums[rand() % nums.size()];
+    }
+};
