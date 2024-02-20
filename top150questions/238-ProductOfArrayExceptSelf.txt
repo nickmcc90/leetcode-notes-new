@@ -1,0 +1,51 @@
+2/20/24
+
+The goal is to complete this problem using O(n) time.
+This would mean having to iterate through each number (which is O(n)) but
+having a process that takes O(1) time to calculate the products of
+the rest of the numbers. I'm thinking we start off by putting our given
+numbers in a data structure that allows us to do this.
+
+Solution: 
+
+We would have two arrays: a prefix product array, and a postfix product array.
+In the prefix product array, we would take the first element from our given array and put
+it in as the first element. Then, in the given array we multiply the first and the second element,
+and that product will go into the second element of the prefix product array. We do this from left
+to right. For the postfix, we do this same process but from right to left. Here is an example:
+
+array = [1, 2, 3, 4]
+prefix = [1, 2, 6, 24]
+postfix = [24, 24, 12, 4]
+
+Basically, whatever number we are on nums[i], to get the product of all the numbers around it
+excluding itself, we mulitply the number to the left of it in prefix by the number to the right
+of it in postfix. This makes sense because prefix would be the product of all the numbers up until
+our chosen number to the left, and postfix would be the same thing to the right.
+
+This solution is O(n) time, but to make it O(1) space, we don't need to use the prefix and postfix arrays,
+we can store the answer in the output array that we return.
+
+To do this, we will do two passes on the given array, first, calculating the prefix products from left
+to right and putting them in their respective places in the output array. Then, we take the second pass 
+from right to left and calculate the postfix products, and mulitply with the prefix sum that is in the
+array already from the first pass.
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int>(nums.size(), 1) result;
+
+        int prefix = 1;
+        for(int = 0; i <nums.size(); i++) {         // iterating one pass left to right first
+          result[i] = prefix;
+          prefix *= nums[i];
+        }
+        int postfix = 1;
+        for(int i = nums.size()-1; i >= 0; i--) {
+          result[i] *= postfix;
+          postfix *= nums[i];
+        }
+        return result;
+    }
+};

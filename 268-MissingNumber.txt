@@ -1,0 +1,76 @@
+2/20/24
+
+Before watching the solution, I propose to start we can sort the array from least
+to greatest, then iterate through it with a for loop that checks each index and value,
+and if the value is not equal to the index, we return the index.
+
+If the value isn't missing, we can return the nums.size because the missing value is
+at the end of the array.
+
+Time: O(nlogn) Space: O(1);
+
+YOOOOOOO! THIS IS THE FIRST PROBLEM I SOLVED BY MYSELF!!!!!!!!!!!!!!!!!!! LET'S GOOOOOOOOO
+
+Now on to Aryan's solution....
+
+He explained my method, but also this one..
+
+Method #2: Hashmap
+So we make an expected answer array, and also turn our given array into a hash set so that we can do
+O(1) operations of checking the expected array with the hash set.
+
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+      unordered_set<int> originalSet(nums.begin(), nums.end());
+
+      int expectedNums = nums.size();
+      for(int i = 0; i <= expectedNums; i++) {
+        if(originalSet.find(i) == orginalSet.end()) {   // .end() means not present. So if our value is equal to not present....
+          return number;
+        }
+      }
+      return -1;
+    }
+};
+
+Time: O(n) because we go through all numbers
+Space: O(n) because we are using an unordered_set to store values.
+
+Can we improvise this? Since we definetly have to iterate on all the numbers for time, we are asking if
+we can improvise the space.
+
+This method is xoring.
+
+Method #3 Xoring.
+
+x ^ x = 0.    The symbol is xor here.
+
+Xor returns false if two bits are the same, and returns true if two bits are different.
+
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+      int xorValue = nums.size();
+      for(int i = 0; i<nums.size(); i++) {
+        xorValue ^= i ^ nums[i];
+      }
+      return xorValue;
+    }
+};
+
+
+Method #4: Gauss formula
+
+The sum of n natural consecutive elements is ( n(n+1) )/ 2. If we subtract this value with the sum of the given array, we will
+output the missing number.
+
+
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+      int n = nums.size(), originalSum = 0;
+      for(auto el : nums) originalSum  += el;
+      return (n*(n+1))/ 2 - originalSum;
+    }
+};
