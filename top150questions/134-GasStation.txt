@@ -1,0 +1,52 @@
+2/21/24
+
+This is a greedy problem.
+
+gas = [1, 2, 3, 4, 5]
+cost = [3, 4, 5, 1, 2]
+diff = [-2, -2, -2, 3, 3]
+
+Starting at index 3 helps us get through the loop by going through the diff array and hoping to get a value greater than
+or equal to zero.
+
+Also, it makes sense that to start out, if the sum of all elements in the gas array isn't greater than or equal to the
+sum of all the elements in the cost array, that we won't be able to make a whole trip AT ALL. This will be the first
+test base case.
+
+We have two variables to keep track of, the total and the start position.
+
+First, it is imperative that we make sure with the base case that the total of gas is greater than or equal to cost.
+This ensures that there is indeed a solution, and it helps that the problem said that there is only one solution ever.
+Then we are going to go through the diff array from left to right and add each element to our total. If the total
+ever goes below 0, we are going to reset the total back to zero and cross out our current index from ever being a
+possible solution. We go through the entire array. We pick the index that first started our chain of positive values.
+
+This greedy algorithm is O(n) time and O(1) space here.
+
+**Apparently the sum of gas can't be equal to the sum of cost. IDK. Dude said that the challenge of greedy problems
+is identifying that they are greedy, then finding something that works just by knowing or solving it somehow with
+random ideas. Little tricks pretty much.
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int sumGas = 0, sumCost = 0;
+        sumGas = accumulate(gas.begin(), gas.end(), sumGas);
+        sumCost = accumulate(cost.begin(), cost.end(), sumCost);
+
+        if(sumGas < sumCost) {
+            return -1;
+        }
+
+        int total = 0, result = 0;
+        for(int i = 0; i < gas.size(); i++) {
+            total += gas[i] - cost[i];
+            if(total < 0) {
+                total = 0;
+                result = i + 1;
+            }
+        }
+        return result;
+
+    }
+};

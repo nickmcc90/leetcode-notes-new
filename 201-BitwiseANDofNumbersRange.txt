@@ -1,0 +1,45 @@
+2/21/24
+
+I dont know what bitwise AND means...
+
+A brute force approach will not work because the complexity will be too high.
+
+int ans = left;
+for(int i = left; i <= right; i++) {
+  ans = (ans & i)
+}
+
+return ans;
+
+So.. for any bit manipulation problem or anything were they ask you to do BINARY, like an AND operation,
+convert the numbers to binary and start thinking about what you have to do.
+
+We have a left and right boundary. We'll fix the left and subtract one from the right until we reach the left,
+taking the AND operation along each time. This problem is very similar to the 'missing number' problem. So the
+operations will look like this:
+
+n = right & right-1
+
+Converting right to binary. Example:
+
+right = 110100
+So, right & right-1 would be 110000. How? n & n-1 removes the last set bit and keeps everything after it as 0.
+
+How about 110101 & 110101 - 1?
+The answer would be 110100.
+
+In general, if you are asked to remove the last set bit, doing n & n-1 will work.
+
+Since the answer can be up to 2^32... That's 32 bits. And with each operation we are removing the last set bit. So
+we would only have to do this operation AT MAX 32 times.
+
+So let's say we have a range from [7,13]. 
+
+13 & 12 (1101 & 1100)in binary would give 1100, which is 12.
+12 & 11 (1100 & 1011)in binary would give 1000, which is 8. See? We are only taking the last set bit off of the left most number.
+
+But what if our right range goes below our left range 7, since we are skipping numbers, like we did from 12 to 8? Well... we'll just
+make a while loop while right > left, simple.
+
+The code is simple, and O(1) for both time and space complexity.
+
