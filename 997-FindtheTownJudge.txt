@@ -1,0 +1,92 @@
+2/22/24
+
+Here is the solution I tried at first:
+
+class Solution {
+public:
+    int findJudge(int n, vector<vector<int>>& trust) {
+        if(trust.size() == n) {
+            return -1;
+        }
+        int judge = trust[0][1];
+        for(int i = 0; i < trust.size(); i++) {
+            if(trust[i][1] != judge) {
+                return -1;
+            }
+        }
+        return judge;
+    }
+};
+
+However, it isn't gauranteed that a pair of values is going to be somebody trusting the judge. A pair could be
+someone trusting someone else. The REAL case is to see which of the numbers presented in the second value of the pair
+NEVER shows up in the first value of the pair. Since the judge trusts no one, he would never show up in the first value.
+
+And also, the trust size can be equal or more than n, since other people can trust other people as a pair.
+
+Let's do an array for possible contenders, and not possible contenders. This is my strategy. Let's see Aryan's strategy...
+
+
+The problem gives the amount of people that are in the town to start. For the judge to be found, it needs to be in
+the array that everyone is trusting him. So n-1 people need to have a trust relationship with the judge.
+We can see if someone is a judge if they don't trust anyone and if n-1 people trust them basically.
+
+To track these things, we can have an 'in' degree and a 'out' degree. For each pair in the trust array,
+we take each number and increment the first value into the out array, and the second value into the in array.
+
+The judge should have 0 frequency in the out array. The judge should have n-1 frequency in the in array.
+
+Once we make our in and out degree arrays, we then iterate through both made arrays and check if
+an the index of both has a value of 0 for out but a value of n-1 for in. This works because we use
+the index of the array to our advantage.
+
+class Solution {
+public:
+    int findJudge(int n, vector<vector<int>>& trust) {
+        vector<int> inDegree(n+1, 0), outDegree(n+1, 0);    // It's n+1 because there are n people, but we can't start at 0.
+
+        for(auto v : trust) {
+          outDegree[v[0]]++;
+          inDegree[v[1]]++;
+        }
+
+        for(int = 1; i < n; i++;) {               // i starts at 1 because there is no 0 person index.
+          if(inDegree[i] == n - 1 && outDegree[i] == 0) {
+            return i;
+          }
+        }
+        return -1;
+    }
+};
+
+The problem '277. Find the Celebrity' is just like this one.
+
+Can we improvise this? Time and space O(n). It is for sure that we cannot optimize the time, because
+we have to check the status of every node. We can optimize the space by making it one array that
+we store the values in.
+
+We can have an array where we subtract the outDegrees from the inDegrees, because at the end, outDegrees
+is supposed to be 0 for only the judge, so the value of degree for the judge should still be only n - 1.
+
+class Solution {
+public:
+    int findJudge(int n, vector<vector<int>>& trust) {
+        vector<int> degree(n+1, 0)          
+
+        for(auto v : trust) {
+          degree[v[0]]--;
+          degree[v[1]]++;
+        }
+
+        for(int = 1; i <= n; i++;) {
+          if(degree[i] == n - 1) {
+            return i;
+          }
+        }
+        return -1;
+    }
+};
+
+
+Remember, space is important because you could be working for a company with data
+that needs to use as little memory as possible.

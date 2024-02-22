@@ -1,0 +1,49 @@
+2/22/24
+
+We are trying to give the children the minimum amount of candy to satisfy the problem. We give
+children candy based on their rating. Two children with equal rating don't need to have equal candy,
+one can have less depending on its other neighbor.
+
+I'm thinking that we iterate through the children array, and give child 1 a candy. Depending on the
+next child rating, we either increase the candy we give to the current child or leave it alone. This doesn't
+work though, because the strategy we use won't work for both an increasing and decreasing number of children
+ratings.
+
+The strategy here is to initialize all the children with one candy, then do two passes:
+One pass left to right to update the candy values by one if the right neighbor has a higher rating
+than its left neighbor.
+Then one more pass from right to left ensuring that the left neighbor has more candy than its right
+neighbor if his rating is higher.
+Doing two passes like this allows us to check for both sides of each rating.
+
+Remember to do the max function on the second pass, because we don't want to increase the candy
+if a value is already greater than the one being compared.
+
+
+
+class Solution {
+public:
+    int candy(vector<int>& ratings) {
+        vector<int> result(ratings.size(), 1); // giving each child one candy.
+
+        for(int i = 1; i < ratings.size(); i++) {
+            if(ratings[i] > ratings[i-1]) {         // comparing right neighbors with left neighbors.
+                result[i] = result[i-1] + 1;
+            }
+        }
+
+        for(int i = ratings.size()-2; i >= 0; i--) {
+            if(ratings[i] > ratings[i+1]) {         // comparing left neighbors with right neighbors.
+                result[i] = max(result[i], result[i+1] + 1);
+            }   // on our second pass, if the number in result is already greater, we don't want to change it.
+        }
+
+        int sum = 0;                                // adding the candies.
+        sum = accumulate(result.begin(), result.end(), sum);
+
+        return sum;
+    }
+};
+
+
+// n + n +n is just O(n) time. O(1) space.
