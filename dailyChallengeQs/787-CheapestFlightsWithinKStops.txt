@@ -14,6 +14,10 @@ We can use a priority queue to get the minimum cost out, and also keep track of 
 Steps = stops + 1.
 There can be only 1 stop on our journey, but we take two actions to get to our dst.
 
+
+
+
+
 https://www.youtube.com/watch?v=HBfvhLlO_po&t=11s
 
 **I can go back to this problem later. At this point, I've discovered what I need to be
