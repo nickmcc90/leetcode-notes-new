@@ -39,7 +39,7 @@ public:
 
         int result = 0, count = 0;
         int s = 0, e = 0;
-        while(l < intervals.size()) {
+        while(s < intervals.size()) {
             if(start[s] < end[s]) {
                 s++;
                 count++;

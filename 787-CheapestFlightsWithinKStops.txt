@@ -1,0 +1,23 @@
+2/23/24
+
+I have no clue AT ALL how to start this.
+
+Dijkstras and BFS approaches.
+
+We basically want the cheapest price in the smallest allowable distance. So we would think
+that taking only the paths with the least amount of cost is better right? Wrong. Sometimes,
+the path that gives us the cheapest route will be a bunch of stops, but we can reduce our
+stops by taking a more expensive flight sometimes.
+
+We can use a priority queue to get the minimum cost out, and also keep track of steps. 
+
+Steps = stops + 1.
+There can be only 1 stop on our journey, but we take two actions to get to our dst.
+
+https://www.youtube.com/watch?v=HBfvhLlO_po&t=11s
+
+**I can go back to this problem later. At this point, I've discovered what I need to be
+focusing on for DSA, and I'm going to direct my attention to that instead and learn on
+a more productive roadmap to what I want to accomplish. I'm pretty much only doing these
+daily problems because I like the streak that I accrue on the front page of leetcode, but
+that doesn't matter more than actually knowing the basics.
