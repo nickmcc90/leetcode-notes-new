@@ -1,0 +1,53 @@
+2/24/24
+
+It would be easy to square all the elements in place, then sort them. This would take
+nlogn time though. Can we do it in O(n) time? Yes.
+
+So we can create a result array. Then we initialize a left and right pointer at the ends
+of the array. We square both indexes, and see which side is greater. Whichever one is
+greater, we put push that into the result array. Then we move the pointer whose value
+was greater closer to the center, and do it all over again until we reach the center,
+where left > right.
+
+C++
+
+class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        vector<int> result;
+
+        int left = 0, right = nums.size() - 1;
+        while(left <= right) {
+            if(nums[left]*nums[left] < nums[right]*nums[right]) {
+                result.push_back(nums[right]*nums[right]);
+                right--;
+            } else {
+                result.push_back(nums[left]*nums[left]);
+                left++;
+            }
+        }
+        reverse(result.begin(), result.end());
+        return result;
+    }
+};
+
+// we wanna just push the values as they come into the result vector, then reverse it to keep the order.
+
+Python
+
+class Solution(object):
+    def sortedSquares(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        left, right = 0, len(nums) - 1
+        result = []
+        while(left <= right):
+            if nums[left]*nums[left] < nums[right]*nums[right]:
+                result.append(nums[right]*nums[right])
+                right -= 1
+            else:
+                result.append(nums[left]*nums[left])
+                left += 1
+        return result[::-1]

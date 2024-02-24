@@ -1,0 +1,55 @@
+2/24/24
+
+The easiest way to do this would be to make two arrays where we store
+all the zeros for one and all the nonzeros for the other, then pushback
+the elements in the specificied order into the result array.
+
+But we need to do this in place.
+
+An inplace sorting method called QuickSorting will do the trick.
+
+Let's look at the problem in a way that let's us move all the non-zero
+elements to the left side of the array.
+We have a left and a right pointer situated at the beginning of the array.
+Our left pointer only moves forward if our right pointer encounters a non-zero
+value. Our right pointer moves with each iteration. Once a non-zero value
+is found by our right pointer, the left and right pointer swap their values,
+and then the left pointer moves forward after that. The left pointer only moves
+after a swap, which means the right pointer found a value. If the left and right
+pointer are on a non-zero value in the beginning, they both move forward with the
+same logic. It's only when the right pointer finds a non-zero value that they swap
+values, and the left moves forward.
+
+C++
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int l = 0;
+
+        for(int r = 0; r < nums.size(); r++) {
+            if(nums[r] != 0) {
+                int last = nums[l];     // save this value to assign to nums[r] after next line
+                nums[l] = nums[r];      // swapping values
+                nums[r] = last;            // swapping values
+                l++;                    // only incrementing left when we find a non-zero element.
+            }
+        }
+    }
+};
+
+Python
+
+class Solution(object):
+    def moveZeroes(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: None Do not return anything, modify nums in-place instead.
+        """
+        left = 0
+        for i in range(0, len(nums)):
+            if nums[i] != 0:
+                last = nums[left]
+                nums[left] = nums[i]
+                nums[i] = last
+                left += 1
