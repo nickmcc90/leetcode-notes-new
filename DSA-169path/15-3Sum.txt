@@ -1,0 +1,71 @@
+2/25/24
+
+Apparently I need to solve Two Sum and Two Sum II before getting to this problem.
+
+Did it.
+
+Tags: Two pointers, sorting
+
+We are inputting the values this time, not the indexes, and there cannot be
+duplicate values.
+
+
+Let's sort the array first, then have a loop that iterates through each value of the array.
+Then, we can do the 2 pointer method while loop inside of this for loop to search for a 
+3 element sum. 
+
+Sorting takes O(nlogn) and these two loops take O(n^2), so the overall time is O(n^2).
+
+Python
+
+class Solution:
+  def threeSum(self, nums: List[int]) -> List[List[int]]:
+    res = []      # our list of lists
+    nums.sort()   # sorting our array
+
+    for i, a in enumerate(nums):
+      if i > 0 and a == nums[i-1]:      # we don't want duplicate a values.
+        continue
+      l, r = i + 1, len(nums) - 1
+      while(l < r):
+        threeSum = a + nums[l] + nums[r]
+        if threeSum > 0:
+          r -= 1
+        elif threeSum < 0:
+          l += 1
+        else:
+          res.append([a, nums[l], nums[r]])
+          l += 1
+          while nums[l] == nums[l-1] and l < r:   # we don't want l to be duplicate, so we increase l until it isn't equal to the previous.
+            l += 1
+    return res
+
+JavaScript
+
+const threeSum = (nums) => {
+  res = [];
+  nums.sort();
+
+  for(let i = 0; i < nums.length; i++) {
+    let a = nums[i];
+    if(i > 0 && a === nums[i-1]) continue;
+    
+    let l = i + 1;
+    let r = nums.length - 1;
+    while(l < r) {
+      let threeSum = a + nums[l] + nums[r];
+      if(threeSum > 0) {
+        r--;
+      } else if (threeSum < 0) {
+        l++;
+      } else {
+        res.push([a, nums[l], nums[r]]);
+        l++;
+        while l < r && nums[l] === nums[l - 1] {
+          l++;
+        }
+      }
+    }
+  }
+  return res;
+}

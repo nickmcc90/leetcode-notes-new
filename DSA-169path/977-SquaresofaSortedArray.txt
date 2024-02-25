@@ -1,5 +1,7 @@
 2/24/24
 
+Tags: Two Pointers, Arrays
+
 It would be easy to square all the elements in place, then sort them. This would take
 nlogn time though. Can we do it in O(n) time? Yes.
 

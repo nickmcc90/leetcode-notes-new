@@ -1,0 +1,65 @@
+2/25/24
+
+Tags: Sliding window, prefix sum
+
+I have no idea how to solve this.
+
+First we can think of the brute force way, picking x cards from the left side,
+then picking k - x cards from the right side. This would take O(k^2) time.
+
+Next we can think of the sliding window technique. Our window will be k + 1 size.
+Everything outside of the sliding window will be added up as a possibility of cards
+to take. We move our sliding window until the edge of the window reaches the end
+of the array. Each time we move the window, we lose a number from our possibilities
+and gain a number for our possibilities. Out of the total sum of the last possibility,
+we subtract the number we lose that goes into the sliding window when it moves over
+and we add the number we gain as the sliding window releases a new number.
+
+This operation is O(k), because each window slide iterates on k values, so k + k + k
+would make it O(k).
+
+Python
+
+class Solution:
+  def maxScore(self, cardPoints: List[int], k: int) -> int:
+    l, r = 0, len(cardPoints) - k       // initializing the pointers for sliding window.
+
+    total = sum(cardPoints[r:])               // taking the sum of card points from r to the end. This may create storage in python, but we could've done a for loop instead.
+    res = total                     // res will be changing as the sliding window changes, probably a max function for each iteration.
+
+    while(r < len(cardPoints)):
+      total += (cardPoints[l] - cardPoints[r])
+      res = max(total, res)
+      l += 1
+      r += 1
+    
+    return res
+
+JavaScript
+
+/**
+ * @param {number[]} cardPoints
+ * @param {number} k
+ * @return {number}
+ */
+const maxScore = (cardPoints, k) => {
+  let l = 0;
+  let r = cardPoints.length - k;
+  let total = 0;
+  cardPoints.forEach((value, index) => {      // this adds up the necessary stuff from the given array.
+      if(index >= r) {
+          total += value;
+      }
+  });
+
+  let res = total;                          // apparently this doesn't matter.
+
+  while(r < cardPoints.length) {
+    total += (cardPoints[l] - cardPoints[r]);
+    res = Math.max(res, total);
+    l++;
+    r++;
+  }
+
+  return res;
+};

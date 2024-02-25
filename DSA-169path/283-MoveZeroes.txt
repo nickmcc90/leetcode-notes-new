@@ -1,5 +1,7 @@
 2/24/24
 
+Tags: Two Pointers, Arrays
+
 The easiest way to do this would be to make two arrays where we store
 all the zeros for one and all the nonzeros for the other, then pushback
 the elements in the specificied order into the result array.

@@ -1,0 +1,50 @@
+2/25/24
+
+I'm thinking that now that the array is sorted, we can iterate once through the array,
+but up to a point where the numbers are still less than the target. There's gotta
+be some trick that's different from the first Two Sum problem. Let's see the solution.
+
+There is a trick with the fact that it is sorted. We can use a two pointer approach where the
+left pointer is at the beginning at the right pointer is at the end. We add the values
+of the pointers. If the sum is bigger than the target, then we can move the right pointer
+inward to make the sum smaller to match. If the sum is smaller, then we can move the left
+pointer inward to make the sum bigger to match. This works because the numbers are sorted
+in non-decreasing order.
+
+Python
+
+class Solution:
+  def twoSum(self, numbers: List[int], target: int) -> List[int]:
+    l, r = 0, len(numbers) - 1
+
+    while l < r:
+      sum = numbers[l] + numbers[r]
+      if sum > target:
+        r -= 1
+      elif sum < target:
+        l += 1
+      else:
+        return [l + 1, r + 1]
+    return []
+
+
+JavaScript
+
+const twoSum = (numbers, target) => {
+  let l = 0;
+  let r = numbers.length - 1;
+
+  while(l < r) {
+    let sum = numbers[l] + numbers[r];
+    if(sum < target) {
+      l++;
+    } else if(sum > target) {
+      r--;
+    } else {
+      return [l + 1, r + 1];
+    }
+  }
+  return [];
+}
+
+Stop forgetting the arrow functino syntax!!!!

@@ -1,0 +1,41 @@
+2/25/24
+
+So this question can be solved with 2 for loops, the first for loop
+taking O(n) time and the second one inside of that one taking O(n-1),
+so basically this solution would take O(n^2). Can we do this in a
+O(n) time way?
+
+We can iterate through the array only once. First, we initialize a hash
+map. For each value we visit in the given array, we subtract that value 
+from the target. We check to see if that value exists in the hash map(which
+it shouldn't at first), then mark it as value: index in the map, then move on.
+Once we find our second value that adds to the target, the first value of the
+pair will already be in the map.
+
+python:
+
+class Solution:
+  def twoSum(self, nums: List[int], target: int) -> List[int]:
+    prevMap = {} # val : index
+
+    for i, n in enumerate(nums):      # this gives (index, value) for each element in nums.
+      diff = target - n
+      if diff in prevMap:
+        return [prevMap[diff], i];        # returning the first instance, then the current index.
+      prevMap[n] = i                      # if its not in the map, we put the value into the map.
+    return
+
+
+JavaScript
+
+const twoSum = (nums, target) => {
+  prevMap = {};
+
+  for(let i = 0; i < nums.length; i++) {
+    let diff = target - nums[i];
+    if(diff in prevMap) {
+      return [prevMap[diff], i];
+    }
+    prevMap[nums[i]] = i;
+  }
+}
