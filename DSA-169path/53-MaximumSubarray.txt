@@ -1,0 +1,80 @@
+2/26/24
+
+Tags: DP, Kadane Algorithm, Divide & Conquer
+
+The first approach would be to calculate every single subarray and find the largest sum, brute force. This
+would take three loops, with the third loop having the purpose of summing up the positions of the first
+two loops. Time: O(n^3).
+
+To make this better, we can have a variable curSum that saves each sum so when going through all the subarrays,
+we only have to add one number to get the sum:
+
+for(i = 0; i < nums.size(); i++) {
+  for(j = 1; j < nums.size(); j++) {
+    curSum += nums[j]
+  }
+}
+
+Time: O(n^2)
+
+We can make it more optimal. Since we are looking for the maximum sum, negative numbers are not going to help
+us. If we start on a negative number, we can just move on to the next index and ignore that. Also, if a sum starts
+to go negative, and our next number is a positive number, we can ignore (or chop off) the continuous subarray that
+we were forming to start fresh. It's like two pointers. This is like a sliding window too.
+
+Python
+
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        maxSub = nums[0];
+        curSum = 0
+
+        for n in nums:
+            if curSum < 0:
+                curSum = 0
+            curSum += n
+            maxSub = max(curSum, maxSub)
+        return maxSub
+
+Time: O(n)
+
+Or we can write it like this: (is the sum of the subarray we've made so far greater than just starting fresh on the next element?)
+
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        maxSum = nums[0]
+        curSum = maxSum
+
+        for i in range(1, len(nums)):
+            curSum = max(curSum + nums[i], nums[i])
+            maxSum = max(curSum, maxSum)
+        return maxSum
+
+Time: O(n)
+
+Javascript
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray = function(nums) {
+    let maxSum = nums[0];
+    let curSum = maxSum;
+
+    for(let i = 1; i < nums.length; i++) {
+        curSum = Math.max(curSum + nums[i], nums[i]);
+        maxSum = Math.max(curSum, maxSum)
+    }
+    return maxSum;
+};
+
+
+Divide and conquer approach which is more subtle?
+
+With this approach we can get Time: O(nlogn).
+We break up the array into two parts, and continuously break up each half into more halves. We calculate
+the left side, the right side, and the total of each subdivision. Eventually we get to the whole array and
+we will have a left side sum, a right side sum, and a total sum. We choose the max between these 3 values.
+
+This is kinda hard... let's learn divide a conquer another time.

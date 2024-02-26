@@ -1,0 +1,70 @@
+2/26/24
+
+Tags: Matrix, array
+
+This would be how to make [1,2,3] three times, if n was 3.
+
+class Solution:
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        result = []
+        for x in range(1, n+1):
+            minires = []
+            for y in range(1, n+1):
+                minires.append(y)
+            result.append(minires)
+        return result
+
+
+So, a 4 pointer strategy could work here. We could just use two pointers, but for readability of the code,
+a left, right, top, and bottom pointer should suffice.
+Once we go through the first row left to right, we will want to move our top pointer down 1.
+Once we go top to bottom, we move in the right pointer.
+Once we go right to left, we move up the bottom pointer.
+Now we've finished a layer. We next move the left pointer in.
+The algorithm continues once again for the subproblems.
+
+The algo stops once the bottom pointer goes past the top, and/or the left
+goes past the right.
+
+<timestamp: 10:32>
+
+Python
+
+class Solution:
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        mat = [[0] * n for _ in range(n)]   # first part is one array with n zeros, second part is multiple n rows.
+
+        left, right = 0, n - 1
+        top, bottom = 0, n - 1        # these would be on the same because it is an n by n matrix, sideways and topwise.
+        val = 1                       # we are keeping track of the value.
+
+        while left <= right:
+            # fill every val in top row
+            for c in range(left, right + 1):     # we need plus 1 on the right to include the right element.
+                mat[top][c] = val
+                val += 1
+            top += 1
+            # fill every val in right col
+            for r in range(top, bottom + 1):
+                mat[r][right] = val
+                val += 1
+            right -= 1
+            # fill every val in bottom row (reverse order)
+            for c in range(right, left - 1, -1):       # the negative 1 at the end indicates reverse order.
+                mat[bottom][c] = val
+                val += 1
+            bottom -= 1
+            # fill every val in left col (reverse order)
+            for r in range(bottom, top - 1, -1):
+                mat[r][left] = val
+                val += 1
+            left += 1
+        return mat
+
+Javascript writing the initial matrix
+
+const rows = 3;
+const columns = 4;
+const matrix = Array.from({ length: rows }, () => 
+               new Array(columns).fill(0));
+console.log(matrix);
