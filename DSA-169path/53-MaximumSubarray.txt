@@ -1,5 +1,7 @@
 2/26/24
 
+MEDIUM
+
 Tags: DP, Kadane Algorithm, Divide & Conquer
 
 The first approach would be to calculate every single subarray and find the largest sum, brute force. This

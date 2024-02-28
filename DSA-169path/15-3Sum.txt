@@ -1,5 +1,7 @@
 2/25/24
 
+MEDIUM
+
 Apparently I need to solve Two Sum and Two Sum II before getting to this problem.
 
 Did it.

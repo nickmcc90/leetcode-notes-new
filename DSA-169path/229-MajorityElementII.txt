@@ -2,6 +2,8 @@
 
 Tags: Boyer-Moore Majority Vote algorithm 
 
+MEDIUM
+
 I solved this one on my own, here's the C++ solution with time O(n) and space O(n):
 
 class Solution {

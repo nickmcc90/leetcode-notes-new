@@ -2,6 +2,8 @@
 
 Tags: Sliding window, prefix sum
 
+MEDIUM
+
 I have no idea how to solve this.
 
 First we can think of the brute force way, picking x cards from the left side,

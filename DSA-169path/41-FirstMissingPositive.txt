@@ -1,0 +1,66 @@
+2/28/24
+
+Tags: Array, Sorting
+
+HARD
+
+Ultimately we will have the O(n) time and O(1) space solution.
+
+Let's talk about just sorting it and discovering the missing least positive integer. O(nlogn)
+This is pretty simple. However, a little trick we can use for this solution is that we can
+take the size of the array and know that our smallest positive integer n will lie between 1
+and len(nums) + 1. This is because if an array was [1,2,3], it is length 3. n = 4 here.
+
+We don't even have to sort our array to utilize the fact that our smallest positive integer will
+lie between 1 and len(nums) + 1.
+
+We can convert our unsorted array into a hashSet (takes O(n) time), and iterate through the 
+1-len(nums) + 1 solution. For each iteration, we check if the n value is within our hashSet.
+These checkings take O(1) time. And all values in this range are found within the hashSet,
+we shall return len(nums) + 1.
+
+This takes O(n) memory though. We can modify the given array so that our memory is O(1).
+
+We will use a solution similiar to one that we have already done before.
+We shall iterate through the given array 3 times...
+
+1. The first iteration will be to change all the negative numbers in the array to zeros. Negative
+numbers don't help us at all and mean nothing in this problem, so we change them.
+
+2. The second iteration will be to modify the array to declare the prescence of each number in such
+a way that there will be a unique change to the array for each unique element. We take the current value
+and go to the index of that value (value - 1. This works because in an array of [1,2,3,4], the index of 
+each element is just the element - 1, in a sorted array.) and make that value negative. For duplicates,
+if the value we go to is already negative, don't change it again.
+
+For any zeros that we have to convert to mark the prescence of another number, instead of making this
+zero negative, we change can this number to a number out of bounds from our solution set, like
+len(nums) + 1. This is so, just in case, we hit this number again, we won't change the value of this
+element index, because that value doesn't exist.
+
+3. The third iteration will be checking the prescence of our solution array (1 through len(nums) + 1)
+in our given array. If a number is not negative, then it doesn't exist, so we can return that index + 1.
+
+Let's code it up...
+
+class Solution:
+    def firstMissingPositive(self, A: List[int]) -> int:
+        for i in range(len(A)):     # first iteration
+            if A[i] < 0:
+                A[i] = 0
+
+        for num in A:         # second iteration
+            num = abs(num)
+            if 1 <= num <= len(A):  
+                index = num - 1
+                if A[index] == 0:
+                    A[index] = (len(A) + 1) * -1
+                elif A[index] < 0:
+                    continue
+                else: 
+                    A[index] = -A[index]
+
+        for i in range(1, len(A) + 1):      # third iteration
+            if A[i - 1] >= 0:
+                return i
+        return len(A) + 1

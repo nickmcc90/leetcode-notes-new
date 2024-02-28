@@ -1,5 +1,7 @@
 2/25/24
 
+EASY
+
 So this question can be solved with 2 for loops, the first for loop
 taking O(n) time and the second one inside of that one taking O(n-1),
 so basically this solution would take O(n^2). Can we do this in a

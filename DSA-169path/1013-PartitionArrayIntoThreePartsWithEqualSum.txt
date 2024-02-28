@@ -2,6 +2,8 @@
 
 Tags: Array, Prefix Sum
 
+EASY
+
 The idea is to add up the whole array, then multiply this value by 1/3. Then, we use prefix sums through the array
 until it adds up to the 1/3 value, and mark this index as one of the partitions, if we find a second partition that
 sums up to the 1/3 value, then we can mark that index too, and at this point, we know that the third partition is

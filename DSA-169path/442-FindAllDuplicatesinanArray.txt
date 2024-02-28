@@ -2,6 +2,8 @@
 
 Tags: Array, sorting, Hash table ordered set
 
+MEDIUM
+
 The array that we need to return for the problem does not count as extra space.
 
 In an interview, the interviewer isn't going to include stuff that doesn't matter in

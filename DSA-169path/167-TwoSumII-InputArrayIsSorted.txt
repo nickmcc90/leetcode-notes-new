@@ -1,5 +1,7 @@
 2/25/24
 
+EASY
+
 I'm thinking that now that the array is sorted, we can iterate once through the array,
 but up to a point where the numbers are still less than the target. There's gotta
 be some trick that's different from the first Two Sum problem. Let's see the solution.
