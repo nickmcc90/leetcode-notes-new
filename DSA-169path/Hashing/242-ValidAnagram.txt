@@ -1,0 +1,88 @@
+2/29/24
+
+Tags: Hashing, array
+
+EASY
+
+This solution is O(n+n+n) time, and O(n+n) memory.
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        unordered_map<char, int> hashS;
+        unordered_map<char, int> hashT;
+
+        if(s.size() != t.size()) return false;
+
+        for(auto p : s) {
+            hashS[p]++;
+        }
+        for(auto p : t) {
+            hashT[p]++;
+        }
+        
+        for(auto p : hashS) {
+            if(hashT[p.first] != p.second) {
+                return false;
+            }
+        }
+                              
+
+        return true;
+    }
+};
+
+Can we make it better? Yes.
+
+We can use less memory if we use one hashmap. We populate it with the values from the first string.
+Then on the second string, we decrement the values in the hashmap. If the hashmap doesn't exist after
+that, then we return true. If the size of the hashmap is any size at all (or there are values in the map
+that aren't zero, like -1) then we return false.
+
+Here's that code in python:
+
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        hashmap = defaultdict(int)
+
+        for p in s:
+            hashmap[p] += 1
+        
+        for p in t:
+            hashmap[p] -= 1
+
+        for char, n in hashmap.items():
+            if(hashmap[char] != 0):
+                return False
+        return True
+
+
+How about with unicode characters? This would use O(26) memory though, which is O(1);
+
+
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        vector<int> freq(26, 0);
+
+        if(s.size() != t.size()) return false;
+
+        for(auto p : s) {
+            freq[p-'a']++;
+        }
+        for(auto p : t) {
+            freq[p-'a']--;
+        }
+        
+
+        for(auto p : freq) {
+            if(p != 0) {
+                return false;
+            }
+        }
+                      
+
+        return true;
+    }
+};

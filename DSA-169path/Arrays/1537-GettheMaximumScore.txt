@@ -1,0 +1,66 @@
+2/29/24
+
+Tags: Two Pointers
+
+HARD
+
+This solution shall take O(n+m) time (n and m being the lengths of nums1 and nums2)
+and O(1) space.
+
+We first initialize the modulus variable (to take the modulus of the answer once we are done), 
+then some long long ints of ans, sum1, sum2 because these numbers can get very long, and finally
+our two pointers, i and j.
+
+For our main loop, we move through each array. We exit once one of our pointers falls out.
+We are going to be moving both pointers through each array. We are trying to get the pointers to both
+land on an equal number because these are our checkpoints. To accomplish this, we see which one of the values
+the pointers are on is bigger. If the value at i is bigger, we move j so that there's a chance they can have
+equal values. This works because they are sorted arrays. When we move a pointer, we increment the sum
+that we have for that specific array.
+
+Once we reach a checkpoint (equal numbers), we take the max both sums of both arrays so far and add them to our
+ans variable to store, as well as adding the current checkpoint value we are on. We then increment each
+pointer so that they are on the next value, and refresh our sums for both arrays. We refresh the sums because
+when we reach checkpoints, we already discover the highest answer we can get, so checkpoints are like new starts
+to the array.
+
+Once one of our pointers falls out of bounds, we exit the main loop and produce two other loops to check which
+pointer is still in bounds, and finish their sum up. Then we take the max of what we have of both sums.
+
+We take the modulus of the ans at the end, and return it as an integer.
+
+class Solution {
+public:
+    int maxSum(vector<int>& nums1, vector<int>& nums2) {
+        int mod = 1e9+7;
+        long long int ans = 0, sum1 = 0, sum2 = 0;
+        int i = 0, j = 0;                             // init
+
+        while(i<nums1.size() and j<nums2.size()) {      // main loop
+            if(nums1[i] > nums2[j]) {
+              sum2 += nums2[j++];         // this captures the value of nums2[j], THEN increments j.
+            }
+            else if(nums1[i] < nums2[j]) {
+              sum1 += nums1[i++];
+            }
+            else {                    // if they are equal
+              ans += nums1[i] + max(sum1,sum2);
+              i++;
+              j++;
+              sum1 = 0;
+              sum2 = 0;
+            }
+        }
+
+        while(i<nums1.size()) {       // two loops to get the rest of the sums of the pointer that didn't exit the main loop
+          sum1 += nums1[i++];
+        }
+        while(j<nums2.size()) {
+          sum2 += nums2[j++];
+        }
+        
+        ans += max(sum1, sum2);       // total answer
+        ans = ans % mod;              // modulus
+        return (int) ans;             // returned as an int
+    }
+};
