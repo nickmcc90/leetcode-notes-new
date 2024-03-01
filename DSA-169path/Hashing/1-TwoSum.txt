@@ -1,0 +1,19 @@
+3/1/24
+
+Tags: Unordered Map
+
+EASY
+
+We already did this problem as a prerequiste to the ThreeSum problem in the arrays folder. So, I recoded
+the solution without looking at that problem in Python instead of C++.
+
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        map = {}
+        diff = 0       
+        for i in range(len(nums)):
+            diff = target - nums[i]
+            if(diff in map):
+                return [map[diff], i]
+            map[nums[i]] = i
+            

@@ -1,0 +1,27 @@
+3/1/24
+
+Tags: Unordered Map, Hashing 
+
+MEDIUM
+
+I did this problem already in the dailyChallengeQs folder. Let's see if I can do it again.
+
+I did it. However I have no idea how to add a list of strings to a dictionary as a value in python in a for loop.
+
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        answer = []
+        hashmap = {}
+        sortedValue = ''
+        for p in strs:
+            sortedValue = p
+            sortedValue = ''.join(sorted(sortedValue))
+            hashmap[sortedValue] = p
+
+        for key, value in hashmap.items():
+            answer.append(value)
+
+        return answer
+
+
+# I do not know how to add a list of strings to a dictionary in python!
