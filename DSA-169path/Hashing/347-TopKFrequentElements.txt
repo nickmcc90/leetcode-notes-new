@@ -3,3 +3,39 @@
 Tags: Bucket sort, count sort, hash map
 
 MEDIUM
+
+The first method would be to put the occurences of all the numbers into a map, then sort the map
+and grab the two highest frequency values. This would take O(nlogn) for sorting the map.
+
+The second method would be to create a max heap where popping values from the heap would give us the
+most frequent number automatically, and we just pop from the heap k times. This would take O(n) to make
+the heap. Each pop is log n, and to do all our pops it would take k log n. So a little better.
+
+There's a method with O(n) time and O(n) memory. We could have an array with which the indexes represent
+the count of a value. We store the value that occurs that many 'index' times within the index. So this would
+be like a 2D array pretty much.
+We make the size of this array that stores the values the size of the given array + 1. This is because the given
+array could have all of the same number, and to document this we have our last position in our made array.
+Like if an array of size 6 was all 8's, we could put that in our 6 index array, which would warrant having
+an array of size 7 since there's a pesky index 0.
+We iterate through our made array from the back of the array to the front to get the max value. This takes O(n) time.
+Don't forget, we will need a hash map to actually get the frequency of each element, which is O(n) memory.
+
+Here's the code in python:
+
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        count = {}    # we could just do a defaultdict, but this would be how to do it without one.
+        freq = [[] for i in range(len(nums) + 1)]
+
+        for n in nums:
+            count[n] = 1 + count.get(n, 0)
+        for n, c in count.items():
+            freq[c].append(n)
+        
+        res = []
+        for i in range(len(freq) - 1, 0, -1):     # its -1 because we start there, and now the 0 is exclusive.
+            for n in freq(i):
+                res.append(n) 
+                if len(res) == k:
+                    return res
