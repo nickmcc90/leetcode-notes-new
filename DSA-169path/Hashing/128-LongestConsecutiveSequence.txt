@@ -1,0 +1,52 @@
+3/5/24
+
+Tags: Set
+
+MEDIUM
+
+I have no idea how to do this either.
+
+How do we get the start of each sequence? If we draw this problem out, we can see that identifying which sequence
+is longest is really easy. How do we tell the computer this?
+
+The value that starts a sequence does not have a left neighbor. We know that there is a start of a sequence when a number in
+the array does not have something 1 less than it in the array.
+
+We should create a set. For each value, we check to see if there is a number 1 less than it in the array to see if this value
+can be the start of a sequence.
+
+A set has unique numbers only. This takes O(n) time. We iterate through each value and check in our set for a number preceding
+it. If there isn't, we check for a number 1 more than it. If there isn't we move on. Also, if there IS a number preceding the
+value, we move on. This is because it wouldn't be the start of a sequence.
+
+Time: O(n) Space: O(n)
+
+Leetcode is saying this solution takes too long...
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> numSet;      // initializing the set
+        int longest = 0;          // variable to track the longest sequence
+
+        for( auto val : nums) {     // copying values into the set
+          numSet.insert(val);
+        }
+
+        for( auto val : nums) {     
+          // checking to see if its the start of a sequence...
+          if(numSet.find(val - 1) == numSet.end()) {    // if a previous value is NOT found..
+            int length = 0;           // variable to track length of each iteration.
+            while(numSet.find(val + length) != numSet.end()) {  // if a next value IS found...
+              length++;
+            }
+            longest = max(length, longest);
+          }
+        }
+
+        return longest;
+    }
+};
+
+I had a lot of trouble compling this because initially I used a normal set instead of a 
+unordered_set.
