@@ -1,0 +1,20 @@
+3/6/24
+
+We've done this one already in the top150questions.
+
+HARD
+
+I'll give a lil synopsis of my previous solution for practice, since I had to look back
+at my solution.
+
+We initialize two pointers. At the left pointer we record the max height to the left of the pointer ever
+recorded, and at the right pointer we record the max height to the right of the pointer ever recorded.
+We calculate the water that can be stored at each index.
+
+We start with our pointers on the edges. We see which one is smaller. We move the smaller one inward.
+We know that both sides of the water container will be the height of the smallest side for this specific
+index. So we always find the water at a specific space AFTER moving the smallest left or right boundary forward.
+After figuring out a specific index's water level, we iterate again through the while loop and see which boundary is
+smaller.
+
+Check the top150questions folder for the code.
