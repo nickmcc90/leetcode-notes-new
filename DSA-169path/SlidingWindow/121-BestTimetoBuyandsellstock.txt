@@ -1,0 +1,11 @@
+3/7/24
+
+Tags: Dynamic Projgramming, Two Pointers, Greedy, Sliding Window
+
+EASY
+
+I've done this one in the top150questions. Let's see if I can do it again.
+
+We just keep track of the smallest number we've seen, and the largest profit we've made
+always juxtaposing a value and its previous positioned value.
+
