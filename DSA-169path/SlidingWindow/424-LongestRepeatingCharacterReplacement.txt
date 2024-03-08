@@ -1,0 +1,49 @@
+3/8/24 AC SLATERRRR
+
+Tags: Sliding window
+
+MEDIUM
+
+We shall see how to solve this problem in O(26*n) time. 
+
+Let's say we are given:
+ABABBA K = 2
+
+
+We will apply a sliding window technique as well as thing. We start with a sliding window on the first element,
+A. Our condition that we check for the window being a valid length is if the window length minus the most frequent
+element is less than or equal to K. If this result is less than K, then we can make a big substring out of what we
+have in our window. 
+
+windowLen - count(max character) <= K         **count is our map
+
+If this condition is not met, then we move our left pointer until our condition is met. If our condition is met in the
+first place, we increase the length of our sliding window.
+
+How will we check the frequency of each element in our substring? We have a map that adds and subtracts frequency from elements
+as we increase or decrease the sliding window. We also keep track of the max length the window has ever been after it meets the
+main condition.
+
+<timestamp 13:50>
+There is a more optimized solution where we don't decrement the maximum frequency counter that we get from our map.
+
+Here is the O(n*26) solution:
+
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        count = {}    // initializing the map
+        res = 0       // this is our max result that we update
+
+        l = 0         // left pointer
+        for r in range(len(s)):       // right pointer initializied here
+            count[s[r]] = 1 + count.get(s[r], 0)    // for the character at position r, we increment the count of it.
+
+            while (r - l + 1) - max(count.values()) > k:      // we want to decrement l from the map and shorten the window until our condition is met.
+                count[s[l]] -= 1
+                l += 1
+
+            res = max(res, r - l + 1)
+        return res
+
+
+In C++, I'm assuming we make a max heap to put the map values in to retrieve the max value everytime.
