@@ -1,0 +1,20 @@
+3/10/24
+
+Tags: Two pointers, HashMap, Sliding Window 
+
+HARD
+
+The first method would be to brute force and check all the substrings that are possible
+inside s and check them with t. O(n^2 * m) because we are iterating through t each time.
+
+We can optimize by putting t in a hashmap then checking each substring which saves time,
+but still makes things O(n^2) time.
+
+We can optimize this more by having a sliding window (wow) that lengthens or shortens based
+on a condition, and that window starts by being the length of t.
+We make the window bigger until our condition is met. Then we shorten our window from the
+left until our condition is not met anymore. And we keep track of the elements in the
+window each time our condition is satisfied.
+
+<timestamp: 12:42, going over the ways to check the window from i to j to see if those letters
+are in t>
