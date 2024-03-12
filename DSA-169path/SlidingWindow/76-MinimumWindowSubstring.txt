@@ -1,4 +1,4 @@
-3/10/24
+3/10/24 and 3/11/24
 
 Tags: Two pointers, HashMap, Sliding Window 
 
@@ -18,3 +18,50 @@ window each time our condition is satisfied.
 
 <timestamp: 12:42, going over the ways to check the window from i to j to see if those letters
 are in t>
+
+We start with making a map of t. The most optimal solution is to decrement the frequencies within t once
+we find them in s. T's map should be zero once the window is complete.
+
+<timestamp: 19:45>
+
+We keep track of the count of elements in the map of t. If we decrement the count, that means an element is in
+the sliding window. So we increase the window with the left pointer fixed until the count is zero. Once the
+count is zero, we can start shrinking the window from the left. We know that an element from the sliding window
+is an element from t because when we go to the map of t and check the value of an element, it will be above zero.
+This is how we know to decrement the count. If we go to an element and its value is zero, it is not in t, so we
+don't decrement the count.
+
+This is the hard way (not really intuitive way) to do this. Intuitive way would be to make a hashmap of the window
+and look for matches.
+
+<timestamp 36:36>
+class Solution {
+public:
+    string minWindow(string s, string t) {
+      unordered_map<char, int> tmp;
+      for(auto c : t) tmp[c]++;
+      int i = 0, j = 0, counter = t.size(), minStart = 0, minLen = INT_MAX;
+      int n = s.size();
+
+      while (j < n) {
+        if(tmp[s[j]] > 0) {
+          counter--;
+        }
+        tmp[s[j]]--;
+        j++;
+
+        while(counter == 0) {
+          if (j - i < minLen) {
+            minStart = i;
+            minLen = j - 1;
+          }
+          tmp[s[i]]++;
+          if(tmp[s[i]] > 0) {
+            counter++;
+          }
+          i++;
+        }
+      }
+      return (minLen != INT_MAX ? s.substr(minStart, minLen) : "");
+    }
+};
