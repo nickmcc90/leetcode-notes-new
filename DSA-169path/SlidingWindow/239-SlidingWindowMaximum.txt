@@ -1,0 +1,76 @@
+3/12/24
+
+Tags: Queue, Sliding Window, Heap (Priority Queue), Monotonic Queue, Dequeue, Priority Queue, DP
+
+HARD
+
+This was my attempt at doing this problem. I think it is right, but it takes the approach of a for loop
+for each iteration of sliding window, which takes a while. The time limit gets exceeded.
+
+This solution is O(k*(n-k)).
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        int l = 0, r = k - 1;       // pointers
+        int n = nums.size();    // size of nums variable
+        vector<int> res;        // result vector
+        int maxWind = INT_MIN;      // just in case SW has negative nums and 0 is bigger.
+
+        if(n == 0) return res;      // returns empty array if nothing is given
+
+        while(r < n) {
+            for (int i = l; i <= r; i++) {
+                maxWind = max(nums[i], maxWind);
+            }
+            res.push_back(maxWind);
+            maxWind = INT_MIN;
+            r++;
+            l++;
+        }
+        return res;
+    }
+};
+
+Let's see the solution.
+<timestamp: 4:49>
+
+When we find a max in our sliding window, we can eliminate the other options from the window because
+we don't need to look at them again: as long as that high number is also in the window.
+We can use a queue, where we put each element from a specific window into our queue. With each
+element we put in, we check to see if it is greater than the last value put in. If it is, then
+we get rid of the lower elements within the queue. We do this for the whole window until we have the highest
+number, then we output that number to the output array. When we slide the window over one more, we go to
+the queue and check for the highest number there.
+
+That was called a monotonic Decreasing Queue. Its where we wanna remove the smallest elements from the queue
+when we pull up with another element to compare. To get the highest value after we are done scanning the window,
+we look at the leftmost element in the queue. Then after window slides, we pop the front value.
+
+This is a O(n) solution.
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        output = []
+        l = r = 0
+        q = collection.deque()
+
+        while r < len(nums):
+            # pop smaller values from q
+            while q and nums[q[-1]] < nums[r]:        # while q is not empty and the rightmost value is less than the element we are putting in...
+                q.pop()
+            q.append(r)     # we are queuing indexes.
+
+            # if left pointer value is out of bounds, remove it from queue.
+            if l > q[0]:
+                q.popleft()     # pop from left of queue
+
+            #edge case. If our window is finally size k, we get our output, the leftmost in the queue.
+            if (r + 1) >= k:
+                output.append(nums[q[0]])
+                l += 1      # only incremented once we complete our window.
+
+            r += 1    #right is always incremented.
+        return output
+
+So basically we increase our window size by one until we reach k. Then, we increase the left pointer by 1
