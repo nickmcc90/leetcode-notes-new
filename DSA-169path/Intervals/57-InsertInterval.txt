@@ -1,0 +1,49 @@
+3/13/24
+
+Tags: Overlapping Case, Merge Intervals
+
+MEDIUM
+
+Sorting comes in handy with interval problems, but this one is already sorted in
+ascending order. 
+
+We know that two intervals (A and B) are overlapping when...
+Is the end value of B less than the start of A? No.
+Is the start value of B greater than the end value of A? No.
+If the answer is no to both of these questions, then they overlap.
+B is the new interval by the way.
+Ex: newint = [0,3] and [1,2].
+
+After we confirm this, we take the minimum of the left and the maximum of
+the right.
+ Combined = [0,3].
+
+If another interval is overlapping this interval, we do min of left and
+max of right again.
+[0,3] and [3,4] is [0,4].
+<timestamp: 6:29>
+
+After we check if intervals are overlapping is when we add intervals to the output variable.
+
+O(n) time and O(n) space.
+
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        res = []
+
+        for i in range(len(intervals)):
+            if newInterval[1] < intervals[i][0] # if new interval should go before the first interval since its end value is smaller than the first starting value.
+                res.append(newInterval)   # once we add this, we know the rest of them in intervals are completed.
+                return res + intervals[i:] # easy way in python to append the rest of something
+
+            elif newInterval[0] > intervals[i][1]:      # if start time of newInt is greater than the end time of the first interval...
+                res.append(intervals[i])                # get the interval out, since it doesn't overlap with anything.
+
+            else:     # this is the case in which we are overlapping.
+                newInterval = [min(newInterval[0], intervals[i][0]), max(newInterval[1], intervals[i][1])]    # max and min we were talking about.
+
+        res.append(newInterval)
+
+        return res
+
+            
