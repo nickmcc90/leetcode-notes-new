@@ -1,0 +1,42 @@
+3/15/24
+
+Tags: Greedy, Sorting, Array
+
+MEDIUM
+
+Do we have to sort this? Maybe, maybe not.
+I think we can just check through the array for start times that equal other start times, and
+end times that equal other end times. This defines whether something is overlapping or not.
+
+Maybe we can have a map for the start values and a map for the end values. Or have one map,
+and add something to denote that it is a start value or a end value. If the value is ever 2,
+we remove the interval and decrement the value in the map back to 1.
+
+Video solution:
+We sort by the starting point.
+If the second one starts before the first one ends, they are overlapping.
+Out of the two that we can remove, we remove the one that ends first, except
+in some cases. In those, we delete the one with the larger end value.
+
+O(nlogn) time, O(1) space.
+
+In this solution we utilize the previous end value of the interval to judge if intervals
+are overlapping. First to see if the start time of the ahead interval overlaps, and second
+to pick out the smallest end time of the two overlappers because we want to have a small
+interval. This means it'll have the least chance of touching other intervals.
+
+Python
+
+class Solution:
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        intervals.sort()
+
+        res = 0     # total count for our output
+        prevEnd = intervals[0][1] # end value that we are tracking through each iteration
+        for start, end in intervals[1:]:
+            if start >= prevEnd:    # if not overlapping
+                prevEnd = end       # update end value
+            else:
+                res += 1
+                prevEnd = min(prevEnd, end)
+        return res
