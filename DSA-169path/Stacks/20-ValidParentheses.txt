@@ -1,0 +1,25 @@
+3/16/24
+
+Tags: Stack, String, Array 
+
+EASY
+
+We always have to start with an opening bracket. We can never start with
+a closing bracket because anything that will come after it can never make
+it valid. We have a hash map that stores the matching brackets. When we
+have an empty list, we know that all the brackets have matched.
+
+class Solution:
+    def isValid(self, s: str) -> bool:
+        stack = []
+        closeToOpen = {")" : "(", "}" : "{", "]", "["}
+
+        for c in s:
+            if c in closeToOpen:      # if we spot a closing bracket...
+                if stack and stack[-1] == closeToOpen[c]:     # if the stack isn't empty (if it was, then the whole thing is not valid) and the last thing we put in was a open bracket....
+                    stack.pop()   # we get rid of the open bracket.
+                else:
+                    return False
+            else:                 # if its an open bracket... we just add it to stack
+                stack.append(c)
+        return True if not stack else False
