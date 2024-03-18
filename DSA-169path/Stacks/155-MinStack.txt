@@ -1,0 +1,46 @@
+3/18/24
+
+Tags: Stack
+
+MEDIUM
+
+Imma use python from now on. Get really good at it.
+
+In python, you can implement a stack with a linked list, an array, just examples.
+To carry out the minstack function, we can have another stack in addition to the
+first one that holds the minimum value at certain positions in the stack. This is
+an O(1) operation to get the min value because we can check the 2nd stack to see what
+the min value is. Each time we add a value to the first stack, we add the total min value
+to the second stack.
+
+class MinStack:
+
+    def __init__(self):
+        self.stack = []
+        self.minStack = []
+
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        val = min(val, self.minStack[-1] if self.minStack else val)
+        self.minStack.append(val)
+
+    def pop(self) -> None:
+        self.stack.pop()
+        self.minStack.pop()
+        
+
+    def top(self) -> int:
+        return self.stack[-1]
+        
+
+    def getMin(self) -> int:
+        return self.minStack[-1]
+        
+
+
+# Your MinStack object will be instantiated and called as such:
+# obj = MinStack()
+# obj.push(val)
+# obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.getMin()
