@@ -1,0 +1,35 @@
+3/19/24
+
+Tags: Explicit Stack, Implicit Stack, Recursion 
+
+MEDIUM
+
+This reverse polish notation stuff is so weird. Imma boot up the explanation LOL.
+
+Operaters in the list are applied to the previous to values. Once an operation has been performed,
+the two values it was applied to become one value. 
+We add numbers to our stack. Once we reach a operater, we pop the two values from the stack and
+replace them with a new number which is the result of the operation.
+
+Time complexity is O(n) and space is O(n).
+
+class Solution:
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = []
+        for c in tokens:
+            if c == "+":
+                stack.append(stack.pop() + stack.pop())
+            elif c == "-":
+                a, b = stack.pop, stack.pop
+                stack.append(b - a)
+            elif c == "*":
+                stack.append(stack.pop() * stack.pop())
+            elif c == "/":
+                a, b = stack.pop, stack.pop
+                stack.append(int(b / a))
+            else:  # this means it is a number if nothing else
+                stack.append(int(c))
+
+          return stack[0]
+
+Botta bing dude!
