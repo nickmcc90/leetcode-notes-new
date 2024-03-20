@@ -1,0 +1,43 @@
+3/20/24
+
+Tags: Recursion, Backtracking, Implicit Stack 
+
+MEDIUM
+
+No idea at all how to solve this.
+
+We can have a open and close counter for the parenthesis and do a recursion type thing. The rule
+that must be in place for adding closed parenthesis is that the counter for close MUST be less than
+the counter for open.
+
+close++ if close < open
+
+
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        # only add open par. if open < n
+        # only add close par. if close < open
+        # valid if open == close == n
+
+        stack = [] # this will hold the parenthesis
+        res = [] # we will append results to this
+
+        def backtrack(openN, closedN):
+            if openN == closedN == n:
+                res.append("".join(stack))
+                return
+
+            if openN < n:
+                stack.append("(")
+                backtrack(openN + 1, closedN)
+                stack.pop()    # once we are done with this avenue, we pop the par we just put in.
+
+            if closedN < openN:
+                stack.append(")")
+                backtrack(openN, closedN + 1)
+                stack.pop()
+
+          backtrack(0, 0)
+          return res
+
+I don't understand how this works, but eventually I will. I'll mark it down for revision.
