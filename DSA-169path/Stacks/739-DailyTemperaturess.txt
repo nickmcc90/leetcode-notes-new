@@ -1,0 +1,39 @@
+3/21/24
+
+Tags: Stack, Monotonic Stack
+
+MEDIUM
+
+We've done this problem before in the dailyChallengeQs. 
+
+Reiterating from last time I did this, if any problem asks for an index relative to 
+a current index that is closest to, greater than, less than, or to the left or right
+of a value, we use a monotonic stack.
+
+We start at the back of the array and add that number to our stack first, along with
+its index. We move on to the next index. If this number is higher, then we pop the values
+in the stack from the top until there aren't any numbers that are less than our current value.
+We do this first, so our stack is updated. Then, while the stack isn't empty (because if it is,
+then there's nothing to compare anything to) we subtract our current temp index from the temp
+index at the top of the stack to get the answer. 
+
+The trick is to have a stack with a <int,int> pair, the pair being a temperature and index pairing.
+
+I've done this in C++, now let's try to do this in python.
+
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        stack = []
+        ans = [0] * len(temperatures)
+
+        for i in range(len(temperatures) - 1, -1, -1):
+            while stack and stack[-1][0] <= temperatures[i]:
+                stack.pop()
+            if stack:
+                ans[i] = (stack[-1][-1] - i)
+
+            stack.append([temperatures[i], i])
+
+        return ans
+
+That was awesome! I coded that in Python!!
