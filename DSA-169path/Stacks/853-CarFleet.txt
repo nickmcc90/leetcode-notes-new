@@ -1,0 +1,48 @@
+3/22/24
+
+Tags: Sorting, Monotonic Stack, Stack 
+
+MEDIUM
+
+I have a good idea of some calculations that need to be done for this problem.
+I say we do target minus position then divide by the speed to see how many steps it takes
+for a car to reach the goal.
+Here are the options:
+If a car has a starting position after the previous car but has a smaller step list, there is no fleet.
+If a car has a starting position before the previous car but has a smaller step list, there is a fleet.
+Start pos after car but larger step, possible fleet, depends.
+Start pos before car but larger step, no fleet.
+
+Cars with a later position have a higher priority on their speed.
+
+Video solution: 
+One way to think about this is in slope intercept form, where if the car lines intersect with
+their slopes, they become a car fleet.
+
+We can do my solution above with the distance divided by speed to get steps (or time). Once we see
+that we have a car fleet, we can get rid of the car position and speed of the car that is farther away
+from the target (pop this value) because the car that is closer to the target can never be passed, so
+this speed is what we go by for the rest of the cars preceeding it.
+
+It seems like we have to sort the array and start from the back. This is because the cars that are closer
+to the target are more important.
+
+Time: (nlogn) Space: O(n) because we use a stack.
+
+The length of our stack is what we return at the end of the problem, since we pop cars that collide with cars in front.
+
+** I learned about the zip function that takes two or more iterables and aggregates their index values into a pair or more
+through each step.
+** Apparently sorted() sorts by the first number in a pair.
+
+
+class Solution:
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        pair = [[p, s] for p, s in zip(position, speed)]   # list comprehension
+        
+        stack = []
+        for p, s in sorted(pair)[::-1]:
+            stack.append((target - p) / s)    # putting the time in the stack
+            if len(stack) >= 2 and stack[-1] <= stack[-2]:      # making sure there are two cars to compare, and if the time we just put in is faster than the time already in there...
+                stack.pop()
+        return len(stack)
