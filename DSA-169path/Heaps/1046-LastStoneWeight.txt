@@ -1,0 +1,22 @@
+3/23/24
+
+Tags: Heap (Priority Queue), Array
+
+EASY
+
+Python doesn't have max heaps, but they have min heaps. We can multiply every value by
+negative one so the largest numbers become the smallest numbers.
+
+class Solution:
+    def lastStoneWeight(self, stones: List[int]) -> int:
+        stones = [-s for s in stones]
+        heapq.heapify(stones)
+
+        while len(stones) > 1:
+            first = heapq.heappop(stones) 
+            second = heapq.heappop(stones)
+            if second < first:
+                heapq.heappush(stones, first - second)
+
+        stones.append(0)    # if there are no stones, we append a stone here to return.
+        return abs(stones[0])
