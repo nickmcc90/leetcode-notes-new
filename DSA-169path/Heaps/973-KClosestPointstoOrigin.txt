@@ -1,0 +1,32 @@
+3/24/24
+
+Tags: Priority Queue, Multiset, Quickselect
+
+MEDIUM
+
+Using a min heap is slightly better than sorting the array because sorting is nlogn, 
+and using a min heap is klogn.
+
+It's pretty simple, we iterate through the array and calculate the distance for each pair. As we
+do that, we append the distance, x, and y to a group inside our minHeap. The minHeap organizes
+its groups by the first number in there. Then, we create a result array and add only the x and y
+to it within a while loop. We can extract the shortest distance with heapq.heappop and take dist, x, and y from it.
+The while loop runs while k isn't 0, because we decrement it each time we pop a value.
+
+
+**The process for making a minHeap is making an array, adding the values, then heapifying it.
+
+class Solution:
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        minHeap = []
+        for i, j in points:
+            distance = i*i + j*j
+            minHeap.append([distance, i, j]) # python orders by first number
+
+        heapq.heapify(minHeap)
+        res = []
+        while k > 0:
+            dist, x, y = heapq.heappop(minHeap)
+            res.append([x, y])
+            k -= 1
+        return res
