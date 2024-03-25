@@ -1,0 +1,23 @@
+3/25/24
+
+Tags: Heapsort
+
+MEDIUM
+
+I solved this by myself!!!!
+
+We make the numbers negative in the maxHeap before heapifying it because there are only minHeaps in python.
+Changing the sign of every number in the array makes sure that large numbers will be the smallest number.
+We pop values from the heap until our k is depleted. Our result will come out as the wrong sign, so we
+always return the opposite sign result.
+
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        maxHeap = [-s for s in nums]
+        heapq.heapify(maxHeap)
+
+        while k > 0:
+            result = heapq.heappop(maxHeap)
+            k -= 1
+
+        return -result
