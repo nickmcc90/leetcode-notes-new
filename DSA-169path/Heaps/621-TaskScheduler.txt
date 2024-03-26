@@ -1,0 +1,16 @@
+3/26/24
+
+Tags: Priority Queue
+
+MEDIUM
+
+It's better to start with the most frequent characters first. We don't even have to
+look at the characters themselves, just the frequency of each. We process the character
+with the highest frequency each interval.
+
+We can use a maxHeap to pull the highest frequency character.
+
+This takes O(n) time because we have to sort through the array to get the frequencies, but
+the maxHeap takes log n time to pop from.
+
+There is a second part to this problem... using a queue. Apparantely it's optional.
