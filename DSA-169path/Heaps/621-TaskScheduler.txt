@@ -10,7 +10,35 @@ with the highest frequency each interval.
 
 We can use a maxHeap to pull the highest frequency character.
 
-This takes O(n) time because we have to sort through the array to get the frequencies, but
+This entire solution takes O(n) time because we have to sort through the array to get the frequencies, but
 the maxHeap takes log n time to pop from.
 
 There is a second part to this problem... using a queue. Apparantely it's optional.
+
+NOTE:
+ALL INSTANCES WHERE I SAY SUBTRACTING 1 FROM THE MAXHEAP, I MEAN ADDING. IT MEANS THE SAME THING
+SINCE WE HAVE TO CHANGE THE VALUES IN THE MAXHEAP TO NEGATIVE SINCE THATS HOW PYTHON DOES MAXHEAPS.
+
+Solution:
+Put frequencies of chars from the array into the maxHeap (making the numbers negative)
+
+<timestamp 7:20>
+
+In the queue, we will have pairs of values. We will have a time variable to help with the second value in the pair.
+The first value of the pair will be the number
+to put back into the max heap. We get this value by first popping a value from the maxHeap
+then subtracting it by 1.
+The second value of the pair will be a time value. This time value will signify the number that our
+global time variable needs to reach to take this pair out of the queue and back into the maxHeap.
+
+So basically, we pop a value from the maxHeap, increase the time variable, make the pair that goes into the
+queue by putting the popped value from the maxHeap minus 1 as the first value, and the time variable plus the
+n value (cooling time) as the second value. For every iteration we check the second value of the pairs to see
+if its time to pop back in a value.
+
+Once a value that we pop from our maxHeap, when subtracted by one, results in 0, we don't add a pair to
+our queue.
+
+We return our time variable once there is nothing in our queue or maxHeap.
+
+<timestamp 11:27>
