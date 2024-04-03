@@ -41,4 +41,31 @@ our queue.
 
 We return our time variable once there is nothing in our queue or maxHeap.
 
+Time solution is actually O(n * m) because m is the idleTime. Worst case scenario we have all of the same letter and
+we go through the idleTime each time.
+
+
 <timestamp 11:27>
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        map = {};
+        for i in tasks:
+            if i not in map: 
+                map[i] = 0
+            map[i] += 1
+
+        maxHeap = [-values for key, vaules in map.items()]
+        heapq.heapify(maxHeap)
+
+        time = 0
+        q = deque() # pairs of [-cnt, idleTime]
+
+        while maxHeap or q:     #while one of these is not empty, we still have tasks to process.
+            time += 1
+
+            if maxHeap:
+                cnt = 1 + heapq.heappop(maxHeap)
+
+
+<timestamp 15:01>
