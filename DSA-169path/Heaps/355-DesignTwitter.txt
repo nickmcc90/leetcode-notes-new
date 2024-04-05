@@ -1,0 +1,18 @@
+4/5/2024
+
+Tags: Heap (Priority Queue), lld
+
+MEDIUM
+
+I have no idea how to get through this problem, but let's get through a little
+bit of the solution video at a time. I'm at work on 4/5/2024 a Friday, ready to
+go home. I don't even have to make dinner so this weekend is gonna be great! Alright
+let's get it.
+
+Solution:
+This problem comes down to trade-offs with different data structures that we could use to make
+each function decently efficient.
+
+We could implement the follow function by using a hashmap that links a key to a list of followeeIds.
+
+<timestamp: 2:23, let's have a good weekend :3>
