@@ -16,3 +16,15 @@ each function decently efficient.
 We could implement the follow function by using a hashmap that links a key to a list of followeeIds.
 
 <timestamp: 2:23, let's have a good weekend :3>
+
+mmm let's implement a hashset since we can add and remove numbers in O(1) time for the follow and
+unfollow code.
+
+Let's move on to PostTweet. Instead of a hashset, we can do a hashlist. For each post, we just add that
+new post to the end of the list for that user in the map.
+
+GetNewsFeed. We need to get the 10 most recent tweets from the lists of the people that this person
+follows. Someone's most recent tweet is going to be at the end of the list. It would be smart to include
+the time that each post was made within the list. So, instead of just a list of ints, we will have a list of pairs.
+Instead of time, we will have a count. The count will decrement with each post made globally so that we can
+use a min heap in python. (we can increment the count normally if we were using java or something.)
