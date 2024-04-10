@@ -24,7 +24,9 @@ Let's move on to PostTweet. Instead of a hashset, we can do a hashlist. For each
 new post to the end of the list for that user in the map.
 
 GetNewsFeed. We need to get the 10 most recent tweets from the lists of the people that this person
-follows. Someone's most recent tweet is going to be at the end of the list. It would be smart to include
-the time that each post was made within the list. So, instead of just a list of ints, we will have a list of pairs.
+follows. Someone's most recent tweet is going to be at the end of the list in postTweet. It would be smart to include
+the time that each post was made within the list. So, instead of just a list of ints, we will have a list of pairs in postTweet.
 Instead of time, we will have a count. The count will decrement with each post made globally so that we can
 use a min heap in python. (we can increment the count normally if we were using java or something.)
+
+
