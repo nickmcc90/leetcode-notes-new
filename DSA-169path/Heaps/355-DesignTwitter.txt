@@ -30,3 +30,9 @@ Instead of time, we will have a count. The count will decrement with each post m
 use a min heap in python. (we can increment the count normally if we were using java or something.)
 
 
+We need to have the most recent tweets though. For however many people that a person follows,
+we can have a pointer at the end of each postTweet array. We decrement a pointer to the left based
+on which of the pointers is the most recent. This would mean checking each value.
+Orrrrr, we can just take each of these end values at the end of postTweet and put them in a minHeap. Much
+quicker. But, it would take k log k to push all these values into the min heap.
+Either way, each option is good. Generally heaps are better if we needed n heaps.
