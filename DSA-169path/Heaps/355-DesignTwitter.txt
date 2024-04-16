@@ -36,3 +36,36 @@ on which of the pointers is the most recent. This would mean checking each value
 Orrrrr, we can just take each of these end values at the end of postTweet and put them in a minHeap. Much
 quicker. But, it would take k log k to push all these values into the min heap.
 Either way, each option is good. Generally heaps are better if we needed n heaps.
+
+class Twitter:
+
+    def __init__(self):
+        self.count = 0
+        self.tweetMap = defaultdict(list) #userID -> list of [count, tweetIDs]
+        self.followMap = defaultdict(set) # userID -> set of followee IDs
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        self.tweetMap[userId].append([self.count, tweetId])
+        self.count -= 1
+
+    def getNewsFeed(self, userId: int) -> List[int]:
+        res = []
+        minHeap = []
+        
+        for followeeId in self.followMap[userId]:
+            
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        self.followMap[followerId].add(followeeId)
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        if followeeID in self.followMap:
+            self.followMap[followerId].remove(followeeId)
+
+
+# Your Twitter object will be instantiated and called as such:
+# obj = Twitter()
+# obj.postTweet(userId,tweetId)
+# param_2 = obj.getNewsFeed(userId)
+# obj.follow(followerId,followeeId)
+# obj.unfollow(followerId,followeeId)
