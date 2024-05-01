@@ -9,6 +9,7 @@ We should do problem 21 first, because that is a subset of this problem.
 So we take two linked lists at a time and combine them. We send the pairs to
 our mergeList function which is what we've done in 21-MergeTwoSortedLists.txt
 
+We might need to put these problems into the linked list category, not heaps.
 
 # Definition for singly-linked list.
 # class ListNode:
