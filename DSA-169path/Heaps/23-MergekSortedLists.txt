@@ -11,6 +11,10 @@ our mergeList function which is what we've done in 21-MergeTwoSortedLists.txt
 
 We might need to put these problems into the linked list category, not heaps.
 
+Terminology:
+.val is the current value in a linked list.
+.next is every element in the list after the current value.
+
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -22,17 +26,46 @@ class Solution:
             return None
 
         while len(lists) > 1:
-            mergedList = []
+            mergedLists = []
 
             for i in range(0, len(lists), 2):
                 l1 = lists[i]
                 l2 = lists[i+1] if (i+1) < len(lists) else None
-                mergeList(l1, l2)
-
-
+                mergedLists.append(self.mergeList(l1, l2))
+            lists = mergedLists
         return lists[0]
 
+# So basically, we run through the list of lists and take each two we find and put them inside
+# the mergeList function solved in problem 21, which outputs another list that we store in
+# mergedLists. Then once we iterate through the list of lists, we make that list of lists
+# equal to the combined lists we just found and we do it again. This is all within a while loop
+# so this will keep going until we are left with one list. Inside this while loop, we eliminate two
+# lists and turn them into one by bringing the two lists to an outside function and saving the result
+# inside a variable that holds lists.
+
     def mergeList(self, l1, l2):
+      dummy = ListNode()
+      tail = dummy
+
+      while l1 and l2:
+        if l1.val < l2.val:
+            tail.next = l1
+            l1 = l1.next
+
+        else:
+            tail.next = l2
+            l2 = l2.next
+        tail = tail.next
+
+      if l1:
+          tail.next = l1
+      if l2:
+          tail.next = l2
+      
+      return dummy.next
+
 
 
 <timestamp 8:06>
+
+I finally finished this problem on May 20th, 2024 haha.
