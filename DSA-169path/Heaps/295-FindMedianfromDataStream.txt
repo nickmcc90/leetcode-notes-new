@@ -1,0 +1,24 @@
+5/21/24
+
+HARD
+
+Tags: Minheap, Maxheap.
+
+I always forget how to start problems that require you to make a class. Let's
+lock in this time.
+
+The problem wants the median from an ordered list of integers. A brute force way
+would be to insert each new number into an array and sort it everytime. This would
+take O(n) time because each time we put a new number in, we have to move all the
+other numbers.
+
+A better way (since we have to grab the numbers from the middle of the array) would
+be to have a min heap and a max heap. We will take the max of the min heap and the min
+of the max heap. This will work to get the median if both heaps are equal.
+
+If the heaps are unequal, we take the min or max from whatever heap has more numbers in
+it.
+
+**Finding the max or min of a heap is O(1) time.
+
+<timestamp 8:57>
