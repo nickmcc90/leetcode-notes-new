@@ -25,3 +25,15 @@ class Solution:
 
 
 # I do not know how to add a list of strings to a dictionary in python!
+
+Here is the solution I found 8/23/24:
+
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        ans = defaultdict(list)
+
+        for s in strs:
+            key = "".join(sorted(s))
+            ans[key].append(s)
+        
+        return ans.values()
