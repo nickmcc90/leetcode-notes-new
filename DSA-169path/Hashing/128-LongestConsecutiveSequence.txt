@@ -50,3 +50,40 @@ public:
 
 I had a lot of trouble compling this because initially I used a normal set instead of a 
 unordered_set.
+
+
+So I didn't quite understand this with the C++ explanation. Let's explain it in Python!
+
+First, we convert the numbers into a set.
+num_set = set(nums)
+Next, initialize longest variable to keep track of the longest consectuive thing.
+longest = 0
+Then, we iterate through each thing in the original nums.
+for n in nums:
+Then, we check to see if each thing is a start of a new sequence.
+if n - 1 not in num_set:
+Then, we initialize a length to track this sequence.
+length = 1
+Then, we have a while loop to see if we can continue the sequence.
+while n + length in num_set:
+If this is true, we keep increasing the length.
+length += 1
+After all this, we return the longest variable.
+return longest.
+
+Here:
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        num_set = set(nums)
+        longest = 0
+
+        for n in nums:
+            if n - 1 not in num_set:
+                length = 1
+                while n + length in num_set:
+                    length += 1
+
+                longest = max(longest, length)
+                
+        return longest
