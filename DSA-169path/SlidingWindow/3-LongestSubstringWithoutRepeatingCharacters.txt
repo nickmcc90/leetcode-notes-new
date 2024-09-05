@@ -59,4 +59,17 @@ public:
     }
 };
 
-    
+I don't understand this really, so Imma redo this solution in python:
+
+Extend our sliding window if no duplicates, remove from the left if no duplicates.
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        chartSet = set()
+        l = 0
+        # left and right pointer, right pointer will be the r in the for loop.
+        for r in range(len(s)):
+            while s[r] = in charSet: # this'll mean it is a duplicate...
+
+
+            //timestamp 5:33 neetcode
