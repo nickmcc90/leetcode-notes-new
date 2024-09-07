@@ -67,9 +67,17 @@ class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         chartSet = set()
         l = 0
+        res = 0
         # left and right pointer, right pointer will be the r in the for loop.
         for r in range(len(s)):
-            while s[r] = in charSet: # this'll mean it is a duplicate...
+            while s[r] in charSet: # this'll mean it is a duplicate...
+                charSet.remove(s[l]) # we remove the leftmost in the set
+                l += 1          # we increment the pointer.
+            charSet.add(s[r])
+            res = max(res, r - l + 1)
 
+        return res
 
             //timestamp 5:33 neetcode
+
+If there's a duplicate, we will always only take the leftmost items out first.
