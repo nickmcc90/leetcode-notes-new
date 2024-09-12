@@ -30,13 +30,13 @@ class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
         if len(s1) > len(s2): return False
 
-        s1Count, s2Count = [0] * 26, [0] * 26
+        s1Count, s2Count = [0] * 26, [0] * 26   # initializing the space arrays for matching
 
-        for i in range(len(s1)):
-            s1Count[ord(s1[i]) - ord('a')] += 1
-            s2Count[ord(s2[i]) - ord('a')] += 1
+        for i in range(len(s1)):    # populating the space arrays. We are doing the first sized window of length 's1' within s2.
+            s1Count[ord(s1[i]) - ord('a')] += 1   # this gets the ASCII value of our special character and maps it to a space inside the space arrays.
+            s2Count[ord(s2[i]) - ord('a')] += 1   
 
-        matches = 0
+        matches = 0     # init matches variable.
         for i in range(26):
             matches += (1 if s1Count[i] == s2Count[i] else 0)
 
@@ -63,7 +63,24 @@ class Solution:
 I'm redoing the explanation of this problem because I didn't make sense before.
 //timestamp: 8:20
 
+**s1 and s2 don't have to have hashmaps, they can be arrays with 26 spots. [0] * 26
+
 So we start with determining the length of s1. Then we make two hashmaps for both
 strings and see how many matches there are between them. It is possible to have a perfect
 26 matches for a window.
 //timestamp: 9:55
+
+We keep sliding the window to the right one by one, updating the s2's hashmap
+by removing the letter that left the window and adding the letter that came into the
+window from the right.
+
+When we updating the s2 hashmap with a removed left letter, we compare it to s1's
+hashmap and either increment or decrement the matches variable. If matches is ever
+26, we know we have a permutation.
+
+Don't forget about the edge case where if s1 is longer than s2, making it impossible to
+find a permutation inside s2.
+
+Look up at comments in above code.
+
+//timestamp: 13:27
