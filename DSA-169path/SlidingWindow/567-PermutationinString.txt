@@ -62,3 +62,8 @@ class Solution:
 
 I'm redoing the explanation of this problem because I didn't make sense before.
 //timestamp: 8:20
+
+So we start with determining the length of s1. Then we make two hashmaps for both
+strings and see how many matches there are between them. It is possible to have a perfect
+26 matches for a window.
+//timestamp: 9:55
