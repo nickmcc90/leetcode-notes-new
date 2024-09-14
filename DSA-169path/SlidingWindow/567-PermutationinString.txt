@@ -37,8 +37,8 @@ class Solution:
             s2Count[ord(s2[i]) - ord('a')] += 1   
 
         matches = 0     # init matches variable.
-        for i in range(26):
-            matches += (1 if s1Count[i] == s2Count[i] else 0)
+        for i in range(26):   # before we move on to the sliding window, we need to initialize our matches variable with the first window.
+            matches += (1 if s1Count[i] == s2Count[i] else 0) # we want to add one to it ONLY if the indexes of both arrays are equal.
 
         l = 0
         for r in range(len(s1), len(s2)):
@@ -84,3 +84,5 @@ find a permutation inside s2.
 Look up at comments in above code.
 
 //timestamp: 13:27
+
+//timestamp: 14:24
